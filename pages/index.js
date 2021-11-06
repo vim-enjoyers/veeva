@@ -3,6 +3,7 @@ import Head from 'next/head'
 import UploadButton from '../components/upload-button'
 import Link from 'next/Link'
 import Report from '../components/report'
+import ShowNewMonthly from '../components/report'
 import { useRouter } from 'next/router'
 
 const Index = () => {
@@ -36,7 +37,7 @@ const Index = () => {
           <h1 className="text-4xl">Vim Enjoyers' Solution for Veeva's Challenge</h1>
           <h2 className="text-2xl text-gray-600">Hack Ohio 2021</h2>
         </div>
-        {viewingReport ? (<Report data={doctors} />) : (
+        {viewingReport ? (<ShowNewMonthly data={doctors} />) : (
           <div className="h-96 bg-gray-200">
             <UploadButton onFileLoad={handleOnFileLoad} />
             <div className="flex justify-center">

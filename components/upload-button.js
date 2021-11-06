@@ -22,10 +22,10 @@ export default class UploadButton extends React.Component {
       let newRx = [], totalRx = [];
       for (const property in doctor) {
         if (property.substring(0, 3) === "NRx") {
-          newRx.push(doctor[property])
+          newRx.push(parseInt(doctor[property]))
         }
         if (property.substring(0, 3) === "TRx") {
-          totalRx.push(doctor[property])
+          totalRx.push(parseInt(doctor[property]))
         }
       }
       const newDoctor = {
