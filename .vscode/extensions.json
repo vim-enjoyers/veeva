@@ -1,0 +1,10 @@
+{
+    "recommendations": [
+      "dbaeumer.vscode-eslint",
+      "formulahendry.auto-close-tag",
+      "formulahendry.auto-rename-tag",
+      "2gua.rainbow-brackets",
+      "Gruntfuggly.todo-tree",
+      "pulkitgangwar.nextjs-snippets"
+    ]
+  }
