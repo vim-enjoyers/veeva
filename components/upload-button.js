@@ -8,27 +8,27 @@ export default class UploadButton extends React.Component {
   handleOpenDialog = (e) => {
     // Note that the ref is set async, so it might be null at some point
     if (buttonRef.current) {
-      buttonRef.current.open(e);
+      buttonRef.current.open(e)
     }
-  };
+  }
 
   handleOnFileLoad = (data) => {
-    console.log('---------------------------');
-    console.log(data);
-    console.log('---------------------------');
-  };
+    console.log('---------------------------')
+    console.log(data)
+    console.log('---------------------------')
+  }
 
   handleOnError = (err, file, inputElem, reason) => {
-    console.log('---------------------------');
-    console.log(err);
-    console.log('---------------------------');
-  };
+    console.log('---------------------------')
+    console.log(err)
+    console.log('---------------------------')
+  }
 
   handleOnRemoveFile = (data) => {
-    console.log('---------------------------');
-    console.log(data);
-    console.log('---------------------------');
-  };
+    console.log('---------------------------')
+    console.log(data)
+    console.log('---------------------------')
+  }
 
   handleRemoveFile = (e) => {
     // Note that the ref is set async, so it might be null at some point
@@ -45,7 +45,11 @@ export default class UploadButton extends React.Component {
         onError={this.handleOnError}
         noClick
         noDrag
-        config={{}}
+        config={
+          {
+            header: true
+          }
+        }
         style={{}}
         onRemoveFile={this.handleOnRemoveFile}
       >
