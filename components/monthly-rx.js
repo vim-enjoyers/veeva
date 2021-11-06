@@ -16,10 +16,10 @@ const MonthlyRx = ( doctor_data ) => {
   };
 
   const data = {
-    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+    labels: ['1', '2', '3', '4', '5', '6'],
     datasets: [
       {
-        label: '# of Votes',
+        label: '# of Prescriptions',
         data: doctor_data.data,
         borderWidth: 1,
       },
@@ -28,10 +28,11 @@ const MonthlyRx = ( doctor_data ) => {
 
   return (
   <>
-    <div className='header'>
-
+    <div className="py-8">
+      <div className="">
+        <Bar data={data} options={options} />
+      </div>
     </div>
-    <Bar data={data} options={options} />
   </>
 )};
 
