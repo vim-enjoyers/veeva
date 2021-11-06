@@ -1,9 +1,9 @@
-const Report = () => {
+const Report = ({ data }) => {
   return (
     <div>
-      <p>Hello</p>
+      <p>The first doctor's name is {data[0].first_name}.</p>
     </div>
-  );
+  )
 }
 
-export default Report;
+export default Report
