@@ -10,6 +10,10 @@ const Index = () => {
 
   const router = useRouter()
 
+  const handleOnFileLoad = (data) => {
+    setDoctors(data)
+  }
+
   // TODO: redirect to home if navigating directly to report
   // useEffect(() => {
   //   if (router.query.report) router.push('/', { shallow: true })
@@ -27,14 +31,13 @@ const Index = () => {
       </Head>
 
       <main className="">
-
         <div className="p-12 text-center font-bold">
           <h1 className="text-4xl">Vim Enjoyer's Solution for Veeva's Challenge</h1>
           <h2 className="text-2xl text-gray-600">Hack Ohio 2021</h2>
         </div>
         {viewingReport ? (<div></div>) : (
           <div className="h-96 bg-gray-200">
-            <UploadButton />
+            <UploadButton onFileLoad={handleOnFileLoad} />
             <Link href="/?report=true" shallow>
               <a className="text-white px-8 py-4 text-md bg-blue-500 rounded shadow">Generate Report</a>
             </Link>

@@ -42,6 +42,7 @@ export default class UploadButton extends React.Component {
     console.log('PROCESSED DATA')
     console.log(doctorData)
     console.log('---------------------------')
+    this.props.onFileLoad(doctorData)
   }
 
   handleOnError = (err, file, inputElem, reason) => {
