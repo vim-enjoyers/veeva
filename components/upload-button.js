@@ -14,7 +14,33 @@ export default class UploadButton extends React.Component {
 
   handleOnFileLoad = (data) => {
     console.log('---------------------------')
+    console.log('RAW DATA')
     console.log(data)
+    console.log('---------------------------')
+    const doctorData = data.map((line, index) => {
+      const doctor = line.data
+      let newRx = [], totalRx = [];
+      for (const property in doctor) {
+        if (property.substring(0, 3) === "NRx") {
+          newRx.push(doctor[property])
+        }
+        if (property.substring(0, 3) === "TRx") {
+          totalRx.push(doctor[property])
+        }
+      }
+      const newDoctor = {
+        first_name: doctor.first_name,
+        last_name: doctor.last_name,
+        state: doctor.State,
+        product: doctor.Product,
+        new_rx: newRx,
+        total_rx: totalRx
+      }
+
+      return newDoctor
+    })
+    console.log('PROCESSED DATA')
+    console.log(doctorData)
     console.log('---------------------------')
   }
 
