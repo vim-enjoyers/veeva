@@ -10,6 +10,11 @@ const Index = () => {
 
   const router = useRouter()
 
+  // TODO: redirect to home if navigating directly to report
+  // useEffect(() => {
+  //   if (router.query.report) router.push('/', { shallow: true })
+  // })
+
   useEffect(() => {
     setViewingReport(router.query.report)
   }, [router.query.report])
