@@ -1,12 +1,28 @@
-import React, { Component, useState } from 'react'
+import React, { Component, useState, useEffect } from 'react'
 import Head from 'next/head'
 import UploadButton from '../components/upload-button'
 import Link from 'next/Link'
 import Report from '../components/report'
+import { useRouter } from 'next/router'
 
 const Index = () => {
   const [viewingReport, setViewingReport] = useState(false)
   const [doctors, setDoctors] = useState()
+
+  const router = useRouter()
+
+  const handleOnFileLoad = (data) => {
+    setDoctors(data)
+  }
+
+  // TODO: redirect to home if navigating directly to report
+  // useEffect(() => {
+  //   if (router.query.report) router.push('/', { shallow: true })
+  // })
+
+  useEffect(() => {
+    setViewingReport(router.query.report)
+  }, [router.query.report])
 
   return (
     <div className="">
@@ -16,19 +32,16 @@ const Index = () => {
       </Head>
 
       <main className="">
-
         <div className="p-12 text-center font-bold">
           <h1 className="text-4xl">Vim Enjoyers' Solution for Veeva's Challenge</h1>
           <h2 className="text-2xl text-gray-600">Hack Ohio 2021</h2>
         </div>
-        {viewingReport ? (<Report />) : (
+        {viewingReport ? (<Report data={doctors} />) : (
           <div className="h-96 bg-gray-200">
-            <UploadButton />
-            <div className="flex justify-center">
-              <Link href="/?report" shallow>
-                <a className="text-white font-bold px-4 py-4 text-md bg-gray-800 rounded">Generate Report</a>
-              </Link>
-            </div>
+            <UploadButton onFileLoad={handleOnFileLoad} />
+            <Link href="/?report=true" shallow>
+              <a className="text-white px-8 py-4 text-md bg-blue-500 rounded shadow">Generate Report</a>
+            </Link>
           </div>)}
       </main >
 
@@ -38,6 +51,5 @@ const Index = () => {
     </div >
   )
 }
-
 
 export default Index
