@@ -2,6 +2,7 @@ import React, { Component, useState } from 'react'
 import Head from 'next/head'
 import UploadButton from '../components/upload-button'
 import Link from 'next/Link'
+import Report from '../components/report'
 
 const Index = () => {
   const [viewingReport, setViewingReport] = useState(false)
@@ -17,19 +18,21 @@ const Index = () => {
       <main className="">
 
         <div className="p-12 text-center font-bold">
-          <h1 className="text-4xl">Vim Enjoyer's Solution for Veeva's Challenge</h1>
+          <h1 className="text-4xl">Vim Enjoyers' Solution for Veeva's Challenge</h1>
           <h2 className="text-2xl text-gray-600">Hack Ohio 2021</h2>
         </div>
-        {viewingReport ? (<div></div>) : (
+        {viewingReport ? (<Report />) : (
           <div className="h-96 bg-gray-200">
             <UploadButton />
-            <Link href="/?report" shallow>
-              <a className="text-white px-8 py-4 text-md bg-blue-500 rounded shadow">Generate Report</a>
-            </Link>
+            <div className="flex justify-center">
+              <Link href="/?report" shallow>
+                <a className="text-white font-bold px-4 py-4 text-md bg-gray-800 rounded">Generate Report</a>
+              </Link>
+            </div>
           </div>)}
       </main >
 
-      <footer className="bg-gray-800 text-white h-16 flex items-center justify-center">
+      <footer className="bg-gray-800 text-white h-16 absolute bottom-0 w-full flex items-center justify-center">
         <h1 className="font-bold text-lg">&copy; Vim Enjoyers 2021</h1>
       </footer>
     </div >

@@ -81,27 +81,17 @@ export default class UploadButton extends React.Component {
       >
         {({ file }) => (
           <aside
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              marginBottom: 10,
-            }}
+            className="py-8 flex justify-center"
           >
             <button
               type="button"
+              className="bg-gray-800 text-white font-bold px-4 rounded ml-4"
               onClick={this.handleOpenDialog}
-              style={{
-                borderRadius: 0,
-                marginLeft: 0,
-                marginRight: 0,
-                width: '40%',
-                paddingLeft: 0,
-                paddingRight: 0,
-              }}
             >
               Browse file
             </button>
             <div
+              className="mx-4"
               style={{
                 borderWidth: 1,
                 borderStyle: 'solid',
@@ -112,19 +102,13 @@ export default class UploadButton extends React.Component {
                 marginBottom: 5,
                 paddingLeft: 13,
                 paddingTop: 3,
-                width: '60%',
+                width: '40%',
               }}
             >
               {file && file.name}
             </div>
             <button
-              style={{
-                borderRadius: 0,
-                marginLeft: 0,
-                marginRight: 0,
-                paddingLeft: 20,
-                paddingRight: 20,
-              }}
+              className="bg-gray-800 text-white font-bold px-4 rounded mr-4"
               onClick={this.handleRemoveFile}
             >
               Remove
