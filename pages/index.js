@@ -40,7 +40,7 @@ const Index = () => {
           <div className="h-96 bg-gray-200">
             <UploadButton onFileLoad={handleOnFileLoad} />
             <div className="flex justify-center">
-              <Link href="/?report" shallow>
+              <Link href="/?report=true" shallow>
                 <a className="text-white font-bold px-4 py-4 text-md bg-gray-800 rounded">Generate Report</a>
               </Link>
             </div>
