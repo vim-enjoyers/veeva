@@ -1,11 +1,18 @@
-import React, { Component, useState } from 'react'
+import React, { Component, useState, useEffect } from 'react'
 import Head from 'next/head'
 import UploadButton from '../components/upload-button'
 import Link from 'next/Link'
+import { useRouter } from 'next/router'
 
 const Index = () => {
   const [viewingReport, setViewingReport] = useState(false)
   const [doctors, setDoctors] = useState()
+
+  const router = useRouter()
+
+  useEffect(() => {
+    setViewingReport(router.query.report)
+  }, [router.query.report])
 
   return (
     <div className="">
@@ -23,7 +30,7 @@ const Index = () => {
         {viewingReport ? (<div></div>) : (
           <div className="h-96 bg-gray-200">
             <UploadButton />
-            <Link href="/?report" shallow>
+            <Link href="/?report=true" shallow>
               <a className="text-white px-8 py-4 text-md bg-blue-500 rounded shadow">Generate Report</a>
             </Link>
           </div>)}
@@ -35,6 +42,5 @@ const Index = () => {
     </div >
   )
 }
-
 
 export default Index
