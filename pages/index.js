@@ -3,6 +3,7 @@ import Head from 'next/head'
 import Upload from '../components/upload'
 import Link from 'next/Link'
 import Report from '../components/report'
+import ShowNewMonthly from '../components/report'
 import { useRouter } from 'next/router'
 
 const Index = () => {
