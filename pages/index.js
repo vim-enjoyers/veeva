@@ -1,22 +1,23 @@
 import Head from 'next/head'
+import UploadButton from '../components/upload-button'
 
 export default function Home() {
   return (
     <div className="">
       <Head>
         <title>Vim Enjoyers' Veeva Solution</title>
-        <link rel="icon" href="/favicon.ico"/>
+        <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main className="">
-        
+
         <div className="p-12 text-center font-bold">
           <h1 className="text-4xl">Vim Enjoyer's Solution for Veeva's Challenge</h1>
           <h2 className="text-2xl text-gray-600">Hack Ohio 2021</h2>
         </div>
 
         <div className="h-96 bg-gray-200">
-
+          <UploadButton />
         </div>
       </main>
 
