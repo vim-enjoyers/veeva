@@ -1,15 +1,66 @@
+import React, { useState } from 'react'
 import MonthlyRx from './monthly-rx.js'
 import PopularRx from './popular-rx.js'
 import NewPopularRx from './newpopular-rx'
 import CountryDrugGrowthRates from './CountryDrugGrowthRates.js'
 
 
+
 const Report = ({ data }) => {
+  const [drugFilter, setDrugFilter] = useState("All")
+  const [stateFilter, setStateFilter] = useState("All")
+
+
+  const generateFilters = () => {
+    return (<>
+      {generateDrugFilters()}
+      {generateStateFilters()}
+    </>)
+  }
+
+  const generateDrugFilters = () => {
+    const uniqueDrugs = [...new Set(data.map(item => item.product))].sort()
+    uniqueDrugs = uniqueDrugs.filter(function (element) {
+      return element !== undefined;
+    })
+    const drugs = uniqueDrugs.map(drug => (
+      <><input type="radio" name="drugs" value={drug} checked={drugFilter === drug} onChange={event => { setDrugFilter(event.target.value) }} />&nbsp;{drug}</>
+    ))
+
+    return (<>
+      <label htmlFor="drugs">Products:</label>
+      <input type="radio" name="drugs" value="All" checked={drugFilter === "All"} onChange={event => setDrugFilter(event.target.value)} />&nbsp;All
+      {drugs}
+    </>)
+  }
+
+  const generateStateFilters = () => {
+    const uniqueStates = [...new Set(data.map(item => item.state))].sort()
+    uniqueStates = uniqueStates.filter(function (element) {
+      return element !== undefined;
+    })
+    const states = uniqueStates.map(state => (
+      <option key={state} value={state}>{state}</option>
+    ))
+
+    return (<>
+      <label htmlFor="states">State:</label>
+      <select name="states" defaultValue={"All"} value={stateFilter} onChange={event => setStateFilter(event.target.value)}>
+        <option value="All">All</option>
+        {states}
+      </select>
+    </>)
+  }
+
   return (
     <div className="w-full">
       <h1 className="text-3xl font-bold">Prescriber Data Report</h1>
       <h3 className="text-lg font-bold" >Generated at {/* TODO: Add time of generation. */}</h3>
       {/* <p>The first doctor's name is {data[0].first_name}.</p> */}
+      <h4>Filter</h4>
+
+      {generateFilters()}
+
       <div className="grid md:grid-cols-2 gap-8 mt-8 text-center">
         <div className="flex flex-col space-y-4">
           <p className="uppercase text-xs text-bold w-full">First doctor's monthly new prescriptions</p>
@@ -23,14 +74,14 @@ const Report = ({ data }) => {
           <p className="uppercase text-xs text-bold">Average Growth Rate for each Drug</p>
           <PredictBestDrug data={data} />
         </div>
-        <div className="flex flex-col space-y-4">
+        {/* <div className="flex flex-col space-y-4">
           <p className="uppercase text-xs text-bold">Total Prescriptions Per Month</p>
           <CreateTotalMostPopularDrug data={data} />
-        </div>
-        <div className="flex flex-col space-y-4">
+        </div> */}
+        {/* <div className="flex flex-col space-y-4">
           <p className="uppercase text-xs text-bold">New Prescriptions Per Month</p>
           <CreateNewMostPopularDrug data={data} />
-        </div>
+        </div> */}
       </div>
     </div>
   )
