@@ -4,12 +4,9 @@ import PopularRx from './popular-rx.js'
 import NewPopularRx from './newpopular-rx'
 import CountryDrugGrowthRates from './CountryDrugGrowthRates.js'
 
-
-
 const Report = ({ data }) => {
-  const [drugFilter, setDrugFilter] = useState("All")
-  const [stateFilter, setStateFilter] = useState("All")
-
+  const [drugFilter, setDrugFilter] = useState("Cholecap")
+  const [stateFilter, setStateFilter] = useState("Illinois")
 
   const generateFilters = () => {
     return (<>
@@ -45,11 +42,37 @@ const Report = ({ data }) => {
 
     return (<>
       <label htmlFor="states">State:</label>
-      <select name="states" defaultValue={"All"} value={stateFilter} onChange={event => setStateFilter(event.target.value)}>
+      <select name="states" value={stateFilter} onChange={event => setStateFilter(event.target.value)}>
         <option value="All">All</option>
         {states}
       </select>
     </>)
+  }
+
+  const filterIfNecessary = (data) => {
+    let result = data
+    // console.log("result before: ", result)
+    if (drugFilter !== "All") {
+      result = result.filter(doctor => {
+        // console.log(drugFilter)
+        // console.log('product: ' + doctor.product)
+        return (doctor.product === drugFilter)
+      })
+      console.log("result after: ", result)
+    }
+    if (stateFilter !== "All") {
+      result = result.filter(doctor => doctor.state === stateFilter)
+    }
+    // console.log(result)
+    return result
+  }
+
+  const displayFirst = () => {
+    const filteredData = filterIfNecessary(data)
+    console.log(filteredData[0])
+    return (
+      <h4>The first doctor in the array is {filteredData[0].first_name} {filteredData[0].last_name}.</h4>
+    )
   }
 
   return (
@@ -60,6 +83,8 @@ const Report = ({ data }) => {
       <h4>Filter</h4>
 
       {generateFilters()}
+
+      {displayFirst()}
 
       <div className="grid md:grid-cols-2 gap-8 mt-8 text-center">
         <div className="flex flex-col space-y-4">
@@ -86,6 +111,7 @@ const Report = ({ data }) => {
     </div>
   )
 }
+
 
 const PredictBestDrug = (data) => {
 
