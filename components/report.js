@@ -121,7 +121,7 @@ const Report = ({ data }) => {
               <tr className="font-bold">
                 <th className="pl-4"></th>
                 <th className="px-4 ">Name</th>
-                <th className="px-4">Predicted New Prescriptions in {futureMonths} Months</th>
+                <th className="px-4">Predicted New Prescriptions in {futureMonths} Month{futureMonths > 1 ? "s" : null}</th>
               </tr>
               <FindLinearRegressions data={filterIfNecessary(data)} future={futureMonths} />
             </table>
@@ -162,7 +162,6 @@ const Report = ({ data }) => {
         </div>
         <div className="flex flex-col space-y-4">
           <p className="uppercase text-xs text-bold">Testing Linear Regressions</p>
-
         </div>
       </div>
     </div>
