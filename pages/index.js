@@ -1,7 +1,7 @@
 import React, { Component, useState, useEffect } from 'react'
 
 import Upload, { readDefaultData } from '../components/upload'
-import Link from 'next/Link'
+import Link from 'next/link'
 import Report from '../components/report'
 import ShowNewMonthly from '../components/report'
 import { useRouter } from 'next/router'
