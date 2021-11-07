@@ -1,8 +1,10 @@
 import React from 'react';
 import { Bar } from 'react-chartjs-2';
 
-const MonthlyRx = (doctor_data) => {
-
+const MonthlyRx = ({ doctor_data }) => {
+  console.log(doctor_data)
+  const dataCopy = JSON.parse(JSON.stringify(doctor_data))
+  console.log(dataCopy)
   const options = {
     scales: {
       y: {
@@ -15,13 +17,24 @@ const MonthlyRx = (doctor_data) => {
     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
     datasets: [
       {
-        label: '# of Prescriptions',
-        data: doctor_data.data,
+        label: 'Total Prescriptions',
+        data: dataCopy[0].total_rx,
         backgroundColor: [
-          'rgba(54, 162, 235, 0.3)',
+          '#F7981D',
         ],
         borderColor: [
-          'rgba(54, 162, 235, 1)',
+          '#F7981D',
+        ],
+        borderWidth: 1.2,
+      },
+      {
+        label: 'New Prescriptions',
+        data: dataCopy[0].new_rx,
+        backgroundColor: [
+          '#7692FF',
+        ],
+        borderColor: [
+          '#7692FF',
         ],
         borderWidth: 1.2,
       },

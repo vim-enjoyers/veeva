@@ -4,13 +4,6 @@ import { Doughnut } from 'react-chartjs-2'
 const ProductBreakdown = ({ data }) => {
   var dataCopy = JSON.parse(JSON.stringify(data))
 
-  // console.log(dataCopy.filter(doctor => {
-  //   return (doctor.product === "Cholecap")
-  // }))
-
-
-
-
   const graphdata = {
     labels: [
       'Cholecap',

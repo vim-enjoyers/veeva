@@ -69,7 +69,7 @@ const NewPopularRx = ({ newMap, drugFilter }) => {
       <div className='header'>
 
       </div>
-      {console.log(newMap)}
+      {/* {console.log(newMap)} */}
       <Line data={data} options={options} />
     </>
   )

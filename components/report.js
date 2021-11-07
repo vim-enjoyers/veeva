@@ -8,6 +8,8 @@ const Report = ({ data }) => {
   const [drugFilter, setDrugFilter] = useState("All")
   const [stateFilter, setStateFilter] = useState("All")
   const [futureMonths, setFutureMonths] = useState(6)
+  const [doctorSearch, setDoctorSearch] = useState("")
+  const [showSearchResult, setShowSearchResult] = useState(false)
 
   const clearFilters = () => {
     setDrugFilter("All")
@@ -138,17 +140,28 @@ const Report = ({ data }) => {
     return singleDoctor.state
   }
 
+  const searchCheck = (query) => {
+    setShowSearchResult(false)
+    var dataCopy = JSON.parse(JSON.stringify(data))
+    setDoctorSearch(query)
+    let singleDoctor = dataCopy.filter(doctor => {
+      return (doctorSearch === `${doctor.first_name} ${doctor.last_name}`)
+    })
+    if (singleDoctor.length > 0) {
+      setShowSearchResult(true)
+    }
+  }
+
   return (
     <div className="w-full">
       <h1 className="">Prescriber Data Report</h1>
       <h3 className="" >Generated {new Date().toLocaleString()}</h3>
       {/* <p>The first doctor's name is {data[0].first_name}.</p> */}
 
-
       {generateFilters()}
 
       {/* {displayFirst()} */}
-      <div className="mt-16 w-full flex flex-col space-y-12">
+      <div className="mt-16 w-full flex flex-col space-y-12 mb-10">
         <div>
           <h2>Top-Prescribing Doctors</h2>
           <p>This is a list of the doctors who write the most prescriptions for their patients.</p>
@@ -198,6 +211,26 @@ const Report = ({ data }) => {
               <h6 className="uppercase text-xs text-bold">New Prescriptions Per Month</h6>
             </div>
           </div>
+        </div>
+        <div className="flex flex-col space-y-2">
+          <h2>Doctor Search</h2>
+          <p>Search for a specific doctor to see data about their prescribing activity. Examples: Mommy Grigoliis, Bren Clarridge.</p>
+          <form onSubmit={(event) => {
+            event.preventDefault();
+            searchCheck(event.target[0].value)
+          }} className="flex flex-row space-x-4 items-center">
+            <div className="flex flex-row space-x-2 items-center">
+              <label htmlFor="doctorname">Name:</label>
+              <input className="px-2 py-1 border border-text rounded-lg" type="text" name="doctorname" placeholder="Brutus Buckeye"></input>
+            </div>
+            <button className="text-white font-bold px-2 py-1 bg-orange rounded-lg shadow hover:shadow-md" type="submit">Search</button>
+          </form>
+          {showSearchResult ? (<div className="flex flex-col items-center w-full max-w-lg">
+            <div className="flex flex-col space-y-4 w-full">
+              <ShowMonthly data={data} name={doctorSearch} />
+              <h6 className="uppercase text-xs text-bold">Prescriptions Per Month: {doctorSearch}</h6>
+            </div>
+          </div>) : null}
         </div>
       </div>
     </div>
@@ -303,22 +336,14 @@ const PredictBestDrug = (data) => {
   )
 }
 
-/* HELPER FUNCTION: REDIRECTS TO GRAPH CREATION OF DOCTOR NRx VALUES. */
-const ShowNewMonthly = ({ data }) => {
-  const doctor = data[0]
-  return (
-    <div>
-      <MonthlyRx data={doctor.new_rx} />
-    </div>
-  )
-}
-
 /* HELPER FUNCTION: REDIRECTS TO GRAPH CREATION OF DOCTOR TRx VALUES. */
-const ShowTotalMonthly = ({ data }) => {
-  const doctor = data[0];
+const ShowMonthly = ({ data, name }) => {
+  const doctorData = data.filter(doctor => {
+    return (name === `${doctor.first_name} ${doctor.last_name}`)
+  })
   return (
     <div>
-      <MonthlyRx data={doctor.total_rx} />
+      <MonthlyRx doctor_data={doctorData} />
     </div>
   )
 }
