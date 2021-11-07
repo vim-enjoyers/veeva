@@ -111,6 +111,8 @@ const Report = ({ data }) => {
         </div>
         <div>
           <h2>Trending Doctors</h2>
+          <p>A prediction of "new prescriptions" written doctors in the coming months, calculated via linear regression.</p>
+          <p>The doctors shown have the 5 highest amounts of predicted new prescriptions based on the chosen interval of time.</p>
           <FindLinearRegressions data={filterIfNecessary(data)} future={futureMonths} />
         </div>
         <div>
