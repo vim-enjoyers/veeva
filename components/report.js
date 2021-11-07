@@ -66,7 +66,9 @@ const Report = ({ data }) => {
   }
 
   const filterIfNecessary = (data) => {
-    let result = data
+    var dataCopy = JSON.parse(JSON.stringify(data));
+
+    let result = dataCopy
     // console.log("result before: ", result)
     if (drugFilter !== "All") {
       result = result.filter(doctor => {
@@ -84,7 +86,7 @@ const Report = ({ data }) => {
   }
 
   const displayFirst = () => {
-    const filteredData = filterIfNecessary(data)
+    const filteredData = filterIfNecessary(dataCopy)
     console.log(filteredData[0])
     return (
       <h4>The first doctor in the array is {filteredData[0].first_name} {filteredData[0].last_name}.</h4>
@@ -133,11 +135,14 @@ const Report = ({ data }) => {
 }
 
 const GetBestDoctor = ({ data }) => {
-  if (data.length == 0) {
+
+  var dataCopy = JSON.parse(JSON.stringify(data));
+
+  if (dataCopy.length == 0) {
     return <h3>No data available under current filters.</h3>
   }
   const reducer = (previousValue, currentValue) => previousValue + currentValue
-  const sortedData = data.sort((a, b) => {
+  const sortedData = dataCopy.sort((a, b) => {
     if (a.total_rx.reduce(reducer, 0) > b.total_rx.reduce(reducer, 0)) {
       return -1
     } else {
