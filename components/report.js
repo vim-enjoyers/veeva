@@ -111,7 +111,20 @@ const Report = ({ data }) => {
         </div>
         <div>
           <h2>Trending Doctors</h2>
-          <FindLinearRegressions data={filterIfNecessary(data)} future={futureMonths} />
+          <select className="my-2 border border-gray-500 py-1 px-4 rounded-lg w-min" name="trendingterm" value={futureMonths} onChange={event => setFutureMonths(event.target.value)}>
+            <option value={1}>Short Term (1 month)</option>
+            <option value={6}>Medium Term (6 months)</option>
+            <option value={12}>Long Term (12 months)</option>
+          </select>
+          <div className="">
+            <table className="report-table">
+              <tr className="font-bold">
+                <th className="pl-4"></th>
+                <th className="px-4 ">Name</th>
+                <th className="px-4">Predicted New Prescriptions in {futureMonths} Months</th>
+              </tr>
+              <FindLinearRegressions data={filterIfNecessary(data)} future={futureMonths} />
+            </table></div>
         </div>
         <div>
           <h2>Total Prescriptions</h2>
@@ -172,11 +185,11 @@ const GetBestDoctor = ({ data }) => {
 
   const tabledata = () => {
     let result = []
-    for (let i = 0; i < Math.min(sortedData.length, 5); i += 1) {
+    for (let i = 0; i < Math.min(sortedData.length, 10); i += 1) {
       result.push(
         <tr>
-          <td className="font-bold px-4">{i + 1}</td>
-          <td className="text-left px-4">{sortedData[i].first_name + " " + sortedData[i].last_name}</td>
+          <td className="font-bold pr-4">{i + 1}.</td>
+          <td className="px-4">{sortedData[i].first_name + " " + sortedData[i].last_name}</td>
           <td className="px-4">{sortedData[i].total_rx.reduce((a, b) => a + b, 0)}</td>
         </tr>
       )
@@ -186,11 +199,11 @@ const GetBestDoctor = ({ data }) => {
 
   return (
     <div className="">
-      <table className="table-auto border border-text p-4">
+      <table className="report-table">
         <tr className="font-bold">
-          <th className="px-4"></th>
-          <th className="px-4">Doctor</th>
-          <th className="px-4">Total Drugs Sold</th>
+          <th className="pr-4"></th>
+          <th className="px-4">Name</th>
+          <th className="px-4">Total Prescriptions</th>
         </tr>
         {tabledata()}
       </table>
@@ -388,30 +401,19 @@ const PredictGrowingDoctors = ({ namesAndEquations, months }) => {
 
   const tabledata = () => {
     let result = []
-    for (let i = 0; i < Math.min(sortedPredictions.length, 5); i += 1) {
+    for (let i = 0; i < Math.min(sortedPredictions.length, 10); i += 1) {
       result.push(
         <tr>
-          <td className="font-bold px-4">{i + 1}</td>
-          <td className="text-left px-4">{sortedPredictions[i][0]}</td>
-          {/* <td className="px-4">{sortedData[i].total_rx.reduce((a, b) => a + b, 0)}</td> */}
+          <td className="font-bold pr-4">{i + 1}.</td>
+          <td className="px-4">{sortedPredictions[i][0]}</td>
+          <td className="px-4">{sortedPredictions[i][1].toFixed(2)}</td>
         </tr>
       )
     }
     return result
   }
 
-  return (
-    <div className="">
-      <table className="table-auto border border-text p-4">
-        <tr className="font-bold">
-          <th className="px-4"></th>
-          <th className="px-4">Doctor</th>
-          {/* <th className="px-4">Total Drugs Sold</th> */}
-        </tr>
-        {tabledata()}
-      </table>
-    </div>
-  )
+  return tabledata()
 }
 
 function linearRegression(x, y) {

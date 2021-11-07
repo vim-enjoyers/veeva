@@ -1,6 +1,5 @@
 @tailwind base;
 
-
 @layer base{
   body{
     @apply font-sans text-text;
@@ -38,6 +37,22 @@
   p{
     @apply font-light;
     font-size: 18px;
+  }
+
+  .report-table{
+    @apply table-auto text-left p-4;
+  }
+
+  .report-table tr{
+    @apply text-xl;
+  }
+
+  .report-table th {
+    vertical-align: bottom;
+  }
+
+  .report-table td:not(:first-child){
+    width: 300px;
   }
 }
 

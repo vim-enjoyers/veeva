@@ -18,7 +18,7 @@ const Layout = ({ children }) => {
           TODO: About page
           <Link><a>About</a></Link> */}
         </header>
-        <main className="flex-auto flex my-6 px-8 md:px-12">
+        <main className="flex-auto flex my-6 lg:py-8 px-8 md:px-12 lg:px-16 xl:px-20">
           <div className="flex-1 w-full">
             {children}
           </div>
