@@ -1,7 +1,7 @@
 import React from 'react';
-import { Bar } from 'react-chartjs-2';
+import { Line } from 'react-chartjs-2';
 
-const PopularRx = ({ totalMap, newMap }) => {
+const PopularRx = ({ totalMap }) => {
 
   const options = {
     scales: {
@@ -67,7 +67,7 @@ const PopularRx = ({ totalMap, newMap }) => {
 
       </div>
       {console.log(totalMap)}
-      <Bar data={data} options={options} />
+      <Line data={data} options={options} />
     </>
   )
 };

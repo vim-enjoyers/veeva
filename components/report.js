@@ -1,5 +1,6 @@
 import MonthlyRx from './monthly-rx.js'
 import PopularRx from './popular-rx.js'
+import NewPopularRx from './newpopular-rx'
 import CountryDrugGrowthRates from './CountryDrugGrowthRates.js'
 
 
@@ -24,7 +25,11 @@ const Report = ({ data }) => {
         </div>
         <div className="flex flex-col space-y-4">
           <p className="uppercase text-xs text-bold">Total Prescriptions Per Month</p>
-          <CreateMostPopularDrug data={data} />
+          <CreateTotalMostPopularDrug data={data} />
+        </div>
+        <div className="flex flex-col space-y-4">
+          <p className="uppercase text-xs text-bold">New Prescriptions Per Month</p>
+          <CreateNewMostPopularDrug data={data} />
         </div>
       </div>
     </div>
@@ -97,9 +102,9 @@ const ShowTotalMonthly = ({ data }) => {
   )
 }
 
-const CreateMostPopularDrug = ({ data }) => {
-  const totalMap = new Map()
-  const newMap = new Map()
+const CreateTotalMostPopularDrug = ({ data }) => {
+  const totalMap = new Map();
+  const newMap = new Map();
   for (let i = 0; i < data.length; i++) {
     if (!(totalMap.has(data[i].product))) {
       totalMap.set(data[i].product, data[i].total_rx);
@@ -120,10 +125,33 @@ const CreateMostPopularDrug = ({ data }) => {
   }
   return (
     <div>
-      <PopularRx totalMap={totalMap} newMap={newMap} />
+      <PopularRx totalMap={totalMap} />
     </div>
   )
 }
 
+const CreateNewMostPopularDrug = ({ data }) => {
+  const newMap = new Map();
+  for (let i = 0; i < data.length; i++) {
+    if (!(newMap.has(data[i].product))) {
+      newMap.set(data[i].product, data[i].new_rx);
+    }
+    else {
+      const tempNew = newMap.get(data[i].product);
+      for (let j = 0; j < tempNew.length; j++) {
+        tempNew[j] += data[i].new_rx[j];
+      }
+      newMap.set(data[i].product, tempNew);
+      // console.log(totalMap);
+      // console.log(newMap);
+    }
+  }
+  return (
+    <div>
+
+      <NewPopularRx newMap={newMap} />
+    </div>
+  )
+}
 
 export default Report
