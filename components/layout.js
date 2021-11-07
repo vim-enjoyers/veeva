@@ -1,7 +1,7 @@
 import React from 'react'
 import Head from 'next/head'
 import { use100vh } from 'react-div-100vh'
-import Link from 'next/Link'
+import Link from 'next/link'
 
 const Layout = ({ children }) => {
   return (
