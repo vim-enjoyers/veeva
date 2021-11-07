@@ -32,7 +32,7 @@ export default class Upload extends React.Component {
     console.log('RAW DATA')
     console.log(data)
     console.log('---------------------------')
-    const doctorData = data.map((line, index) => {
+    const doctorData = data.map(line => {
       const doctor = line.data
       let newRx = [], totalRx = [];
       for (const property in doctor) {

@@ -98,8 +98,8 @@ const ShowTotalMonthly = ({ data }) => {
 }
 
 const CreateMostPopularDrug = ({ data }) => {
-  const totalMap = new Map();
-  const newMap = new Map();
+  const totalMap = new Map()
+  const newMap = new Map()
   for (let i = 0; i < data.length; i++) {
     if (!(totalMap.has(data[i].product))) {
       totalMap.set(data[i].product, data[i].total_rx);

@@ -3,17 +3,13 @@ import { Bar } from 'react-chartjs-2';
 
 const CountryDrugGrowthRates = ( growth_rates ) => {
 
-    const options = {
-        scales: {
-          yAxes: [
-            {
-              ticks: {
-                beginAtZero: true,
-              },
-            },
-          ],
-        },
-      };
+  const options = {
+    scales: {
+      y: {
+        beginAtZero: true,
+      },
+    },
+  };
 
       const data = {
           labels: ['Drug 1', 'Drug 2', 'Drug 3', 'Drug 4'],

@@ -3,17 +3,13 @@ import { Bar } from 'react-chartjs-2';
 
 const PopularRx = ({ totalMap, newMap }) => {
 
-    const options = {
-        scales: {
-            yAxes: [
-                {
-                    ticks: {
-                        beginAtZero: true,
-                    },
-                },
-            ],
-        },
-    };
+  const options = {
+    scales: {
+      y: {
+        beginAtZero: true,
+      },
+    },
+  }
 
     const data = {
         labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],

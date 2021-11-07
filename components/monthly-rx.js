@@ -5,14 +5,9 @@ const MonthlyRx = (doctor_data) => {
 
   const options = {
     scales: {
-      yAxes: [
-        {
-          ticks: {
-            beginAtZero: true,
-          },
-        },
-      ],
-
+      y: {
+        beginAtZero: true,
+      },
     },
   };
 
