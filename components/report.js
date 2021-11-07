@@ -146,7 +146,7 @@ const Report = ({ data }) => {
         </div>
         <div className="flex flex-col space-y-4">
           <p className="uppercase text-xs text-bold">Testing Linear Regressions</p>
-          <FindUpAndComingDoctors data={data} />
+          <FindLinearRegressions data={data} future={6} />
         </div>
       </div>
     </div>
@@ -327,10 +327,10 @@ const CreateNewMostPopularDrug = ({ data }) => {
 
 /* UTILIZES LINEAR REGRESSION TO FIND THE DOCTOR WHOSE LIKELY TO BE A VERY POPULAR PRESCRIBER IN THE FUTURE. */
 /* ASSUMES ALL DOCTORS ARE UNIQUE */
-const FindUpAndComingDoctors = ({ data }) => {
+const FindLinearRegressions = ({ data, future }) => {
 
   /* K= [Last,First] V=[slope, intercept] */
-  var namesAndEquations = new Map();
+  var namesAndEquations = new Array();
   var pairs = new Array();
   var months = new Array();
   var NRx = new Array();
@@ -344,15 +344,57 @@ const FindUpAndComingDoctors = ({ data }) => {
     }
 
     slopeAndIntercept = linearRegression(months, NRx);
-    namesAndEquations.set([data[i].last_name, data[i].first_name], slopeAndIntercept)
-    pairs.push(slopeAndIntercept);
+    namesAndEquations.push([data[i].first_name, data[i].last_name, slopeAndIntercept[0], slopeAndIntercept[1]])
+
   }
+
   console.log(namesAndEquations)
 
   //TODO: IMPLEMENT FUNCTION TO GRAPH(?)
   return (
     <div>
+      <PredictGrowingDoctors namesAndEquations={namesAndEquations} months={future} />
+    </div>
+  )
+}
 
+const PredictGrowingDoctors = ({ namesAndEquations, months }) => {
+  console.log(months)
+  var prediction;
+  var slope;
+  var intercept;
+  var firstName;
+  var lastName;
+  var nameAndPrediction = new Array();
+  var fullName;
+
+  console.log(namesAndEquations);
+  console.log(name)
+  for (let i = 0; i < namesAndEquations.length; i++) {
+    slope = namesAndEquations[i][2];
+    intercept = namesAndEquations[i][3];
+    firstName = namesAndEquations[i][0];
+    lastName = namesAndEquations[i][1];
+
+    prediction = (slope * (months + 6)) + intercept;
+    fullName = firstName + " " + lastName;
+    nameAndPrediction.push([fullName, prediction]);
+  }
+
+  const reducer = (previousValue, currentValue) => previousValue + currentValue
+  const sortedPredictions = nameAndPrediction.sort((a, b) => {
+    if (a[1] > b[1]) {
+      return -1
+    } else {
+      return 1
+    }
+  })
+
+  console.log(sortedPredictions);
+
+  return (
+    <div>
+      <></>
     </div>
   )
 }
