@@ -127,7 +127,7 @@ const Report = ({ data }) => {
               <tr className="font-bold">
                 <th className="pl-4"></th>
                 <th className="px-4 ">Name</th>
-                <th className="px-4">Predicted New Prescriptions in {futureMonths} Months</th>
+                <th className="px-4">Predicted New Prescriptions in {futureMonths} Month{futureMonths > 1 ? "s" : null}</th>
               </tr>
               <FindLinearRegressions data={filterIfNecessary(data)} future={futureMonths} />
             </table>
