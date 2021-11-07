@@ -1,7 +1,7 @@
 import React from 'react';
 import { Line } from 'react-chartjs-2';
 
-const PopularRx = ({ totalMap }) => {
+const NewPopularRx = ({ newMap }) => {
 
     const options = {
         scales: {
@@ -20,7 +20,7 @@ const PopularRx = ({ totalMap }) => {
         datasets: [
             {
                 label: 'Cholecap',
-                data: totalMap.get('Cholecap'),
+                data: newMap.get('Cholecap'),
                 backgroundColor: [
                     'rgba(54, 162, 235, 0.3)',
                 ],
@@ -31,7 +31,7 @@ const PopularRx = ({ totalMap }) => {
             },
             {
                 label: 'Zap-a-Pain',
-                data: totalMap.get('Zap-a-Pain'),
+                data: newMap.get('Zap-a-Pain'),
                 backgroundColor: [
                     'rgba(225, 84, 84, 0.3)',
                 ],
@@ -42,7 +42,7 @@ const PopularRx = ({ totalMap }) => {
             },
             {
                 label: 'Nasalclear',
-                data: totalMap.get('Nasalclear'),
+                data: newMap.get('Nasalclear'),
                 backgroundColor: [
                     'rgba(111,222, 84, 0.3)',
                 ],
@@ -53,7 +53,7 @@ const PopularRx = ({ totalMap }) => {
             },
             {
                 label: 'Nova-itch',
-                data: totalMap.get('Nova-itch'),
+                data: newMap.get('Nova-itch'),
                 backgroundColor: [
                     'rgba(255, 205, 102, 0.3)',
                 ],
@@ -70,10 +70,10 @@ const PopularRx = ({ totalMap }) => {
             <div className='header'>
 
             </div>
-            {console.log(totalMap)}
+            {console.log(newMap)}
             <Line data={data} options={options} />
         </>
     )
 };
 
-export default PopularRx;
+export default NewPopularRx;
