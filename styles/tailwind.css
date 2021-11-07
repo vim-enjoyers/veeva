@@ -1,0 +1,45 @@
+@tailwind base;
+
+
+@layer base{
+  body{
+    @apply font-sans text-text;
+    
+  }
+
+  h1{
+    @apply font-light;
+    font-size: 56px;
+  }
+
+  h2{
+    @apply font-light;
+    font-size: 38px;
+  }
+
+  h3{
+    font-size: 26px;
+  }
+
+  h4{
+    font-size: 22px;
+  }
+
+  h5{
+    @apply font-bold;
+    font-size: 18px;
+  }
+
+  h6{
+    @apply uppercase font-bold;
+    font-size: 15px;
+  }
+
+  p{
+    @apply font-light;
+    font-size: 18px;
+  }
+}
+
+@tailwind components;
+@tailwind utilities;

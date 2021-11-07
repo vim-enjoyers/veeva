@@ -29,7 +29,7 @@ const Report = ({ data }) => {
       return element !== undefined;
     })
     const drugs = uniqueDrugs.map(drug => (
-      <label className={`flex flex-row items-center border border-gray-500 py-1 px-4 rounded-lg ${drugFilter === drug ? "bg-blue-500 text-white border-transparent" : null}`}>
+      <label className={`flex flex-row items-center border border-gray-500 py-1 px-4 rounded-lg ${drugFilter === drug ? "bg-orange text-white border-transparent" : null}`}>
         <input className="appearance-none" type="radio" name="drugs" value={drug} checked={drugFilter === drug} onChange={event => { setDrugFilter(event.target.value) }} />
         <span>{drug}</span>
       </label>
@@ -38,7 +38,7 @@ const Report = ({ data }) => {
     return (<>
       <label htmlFor="drugs">Products:</label>
       <div className="flex flex-row space-x-4">
-        <label className={`flex flex-row items-center border border-gray-500 py-1 px-4 rounded-lg ${drugFilter === "All" ? "bg-blue-500 text-white border-transparent" : null}`}>
+        <label className={`flex flex-row items-center border border-gray-500 py-1 px-4 rounded-lg ${drugFilter === "All" ? "bg-orange text-white border-transparent" : null}`}>
           <input className="appearance-none" type="radio" name="drugs" value="All" checked={drugFilter === "All"} onChange={event => setDrugFilter(event.target.value)} />
           <span>All</span>
         </label>
@@ -95,39 +95,54 @@ const Report = ({ data }) => {
 
   return (
     <div className="w-full">
-      <h1 className="text-3xl font-bold">Prescriber Data Report</h1>
-      <h3 className="text-lg font-bold" >Generated at {/* TODO: Add time of generation. */}</h3>
+      <h1 className="">Prescriber Data Report</h1>
+      <h3 className="" >Generated at {/* TODO: Add time of generation. */}</h3>
       {/* <p>The first doctor's name is {data[0].first_name}.</p> */}
 
 
       {generateFilters()}
 
       {/* {displayFirst()} */}
-
-      <div className="grid md:grid-cols-2 gap-8 mt-16 text-center">
-        <div className="flex flex-col space-y-4">
-          <p className="uppercase text-xs text-bold w-full">First doctor's monthly new prescriptions</p>
-          <ShowNewMonthly data={data} />
-        </div>
-        <div className="flex flex-col space-y-4">
-          <p className="uppercase text-xs text-bold">First doctor's monthly total prescriptions</p>
-          <ShowTotalMonthly data={data} />
-        </div>
-        <div className="flex flex-col space-y-4">
-          <p className="uppercase text-xs text-bold">Average Growth Rate for each Drug</p>
-          <PredictBestDrug data={data} />
-        </div>
-        <div className="flex flex-col space-y-4">
-          <p className="uppercase text-xs text-bold">Total Prescriptions Per Month</p>
-          <CreateTotalMostPopularDrug data={data} />
-        </div>
-        <div className="flex flex-col space-y-4">
-          <p className="uppercase text-xs text-bold">New Prescriptions Per Month</p>
-          <CreateNewMostPopularDrug data={data} />
-        </div>
-        <div className="flex flex-col space-y-4">
-          <p className="uppercase text-xs text-bold">Top-Selling Doctors</p>
+      <div className="mt-16 w-full flex flex-col space-y-12">
+        <div>
+          <h2>Top-Prescribing Doctors</h2>
           <GetBestDoctor data={filterIfNecessary(data)} />
+        </div>
+        <div>
+          <h2>Trending Doctors</h2>
+        </div>
+        <div>
+          <h2>Total Prescriptions</h2>
+          <div className="grid md:grid-cols-2 gap-8 text-center w-full">
+            <div className="flex flex-col space-y-4 w-full">
+              <CreateTotalMostPopularDrug data={data} />
+              <h6 className="uppercase text-xs text-bold">Total Prescriptions Per Month</h6>
+            </div>
+            <div className="flex flex-col space-y-4 w-full">
+              <CreateNewMostPopularDrug data={data} />
+              <h6 className="uppercase text-xs text-bold">New Prescriptions Per Month</h6>
+            </div>
+          </div>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-8 text-center w-full">
+          <div className="flex flex-col space-y-4 w-full">
+            <h6 className="uppercase text-xs text-bold w-full">First doctor's monthly new prescriptions</h6>
+            <ShowNewMonthly data={data} />
+          </div>
+          <div className="flex flex-col space-y-4 w-full">
+            <h6 className="uppercase text-xs text-bold">First doctor's monthly total prescriptions</h6>
+            <ShowTotalMonthly data={data} />
+          </div>
+          <div className="flex flex-col space-y-4 w-full">
+            <h6 className="uppercase text-xs text-bold">Average Growth Rate for each Drug</h6>
+            <PredictBestDrug data={data} />
+          </div>
+
+          <div className="flex flex-col space-y-4 w-full">
+            <h6 className="uppercase text-xs text-bold">Top-Selling Doctors</h6>
+
+          </div>
         </div>
       </div>
     </div>
@@ -166,7 +181,7 @@ const GetBestDoctor = ({ data }) => {
 
   return (
     <div className="flex justify-center">
-      <table className="table-auto border border-black p-4">
+      <table className="table-auto border border-text p-4">
         <tr className="font-bold">
           <th className="px-4"></th>
           <th className="px-4">Doctor</th>
