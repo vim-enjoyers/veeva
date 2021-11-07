@@ -4,4 +4,4 @@ This is our solution to [Veeva Systems' challenge](https://hack.osu.edu/2021/liv
 
 ## Team Members
 
-Surge Kalva, [Peter Campanelli](https://peter.digital), Shay Fabrizio, and [Isaac Mattern](www.isaacmattern.com) - all Computer Science & Engineering students at The Ohio State University
+Surge Kalva, [Peter Campanelli](https://peter.digital), Shay Fabrizio, and [Isaac Mattern](http://isaacmattern.com) - all Computer Science & Engineering students at The Ohio State University
