@@ -8,6 +8,7 @@ import { forIn } from 'lodash'
 const Report = ({ data }) => {
   const [drugFilter, setDrugFilter] = useState("All")
   const [stateFilter, setStateFilter] = useState("All")
+  const [futureMonths, setFutureMonths] = useState(6)
 
   const generateFilters = () => {
     return (<>
@@ -110,6 +111,7 @@ const Report = ({ data }) => {
         </div>
         <div>
           <h2>Trending Doctors</h2>
+          <FindLinearRegressions data={filterIfNecessary(data)} future={futureMonths} />
         </div>
         <div>
           <h2>Total Prescriptions</h2>
@@ -146,7 +148,7 @@ const Report = ({ data }) => {
         </div>
         <div className="flex flex-col space-y-4">
           <p className="uppercase text-xs text-bold">Testing Linear Regressions</p>
-          <FindLinearRegressions data={data} future={6} />
+
         </div>
       </div>
     </div>
@@ -183,7 +185,7 @@ const GetBestDoctor = ({ data }) => {
   }
 
   return (
-    <div className="flex justify-center">
+    <div className="">
       <table className="table-auto border border-text p-4">
         <tr className="font-bold">
           <th className="px-4"></th>
@@ -201,7 +203,7 @@ const PredictBestDrug = (data) => {
 
   //Key: Product, Value: Sums of Each Month
 
-  var dataCopy = JSON.parse(JSON.stringify(data));
+  var dataCopy = JSON.parse(JSON.stringify(data))
 
   var map = new Map()
 
@@ -328,34 +330,27 @@ const CreateNewMostPopularDrug = ({ data }) => {
 /* UTILIZES LINEAR REGRESSION TO FIND THE DOCTOR WHOSE LIKELY TO BE A VERY POPULAR PRESCRIBER IN THE FUTURE. */
 /* ASSUMES ALL DOCTORS ARE UNIQUE */
 const FindLinearRegressions = ({ data, future }) => {
-
+  var dataCopy = JSON.parse(JSON.stringify(data))
   /* K= [Last,First] V=[slope, intercept] */
-  var namesAndEquations = new Array();
-  var pairs = new Array();
-  var months = new Array();
-  var NRx = new Array();
-  var slopeAndIntercept = new Array();
+  var namesAndEquations = new Array()
+  var pairs = new Array()
+  var months = new Array()
+  var NRx = new Array()
+  var slopeAndIntercept = new Array()
 
-  for (let i = 0; i < data.length; i++) {
-
-    for (let j = 0; j < data[i].new_rx.length; j++) {
-      months[j] = j;
-      NRx[j] = data[i].new_rx[j];
+  for (let i = 0; i < dataCopy.length; i++) {
+    for (let j = 0; j < dataCopy[i].new_rx.length; j++) {
+      months[j] = j
+      NRx[j] = dataCopy[i].new_rx[j]
     }
-
     slopeAndIntercept = linearRegression(months, NRx);
-    namesAndEquations.push([data[i].first_name, data[i].last_name, slopeAndIntercept[0], slopeAndIntercept[1]])
-
+    namesAndEquations.push([dataCopy[i].first_name, dataCopy[i].last_name, slopeAndIntercept[0], slopeAndIntercept[1]])
   }
 
   console.log(namesAndEquations)
 
   //TODO: IMPLEMENT FUNCTION TO GRAPH(?)
-  return (
-    <div>
-      <PredictGrowingDoctors namesAndEquations={namesAndEquations} months={future} />
-    </div>
-  )
+  return <PredictGrowingDoctors namesAndEquations={namesAndEquations} months={future} />
 }
 
 const PredictGrowingDoctors = ({ namesAndEquations, months }) => {
@@ -368,8 +363,8 @@ const PredictGrowingDoctors = ({ namesAndEquations, months }) => {
   var nameAndPrediction = new Array();
   var fullName;
 
-  console.log(namesAndEquations);
-  console.log(name)
+  // console.log(namesAndEquations);
+  // console.log(name)
   for (let i = 0; i < namesAndEquations.length; i++) {
     slope = namesAndEquations[i][2];
     intercept = namesAndEquations[i][3];
@@ -381,7 +376,6 @@ const PredictGrowingDoctors = ({ namesAndEquations, months }) => {
     nameAndPrediction.push([fullName, prediction]);
   }
 
-  const reducer = (previousValue, currentValue) => previousValue + currentValue
   const sortedPredictions = nameAndPrediction.sort((a, b) => {
     if (a[1] > b[1]) {
       return -1
@@ -390,11 +384,32 @@ const PredictGrowingDoctors = ({ namesAndEquations, months }) => {
     }
   })
 
-  console.log(sortedPredictions);
+  // console.log(sortedPredictions);
+
+  const tabledata = () => {
+    let result = []
+    for (let i = 0; i < Math.min(sortedPredictions.length, 5); i += 1) {
+      result.push(
+        <tr>
+          <td className="font-bold px-4">{i + 1}</td>
+          <td className="text-left px-4">{sortedPredictions[i][0]}</td>
+          {/* <td className="px-4">{sortedData[i].total_rx.reduce((a, b) => a + b, 0)}</td> */}
+        </tr>
+      )
+    }
+    return result
+  }
 
   return (
-    <div>
-      <></>
+    <div className="">
+      <table className="table-auto border border-text p-4">
+        <tr className="font-bold">
+          <th className="px-4"></th>
+          <th className="px-4">Doctor</th>
+          {/* <th className="px-4">Total Drugs Sold</th> */}
+        </tr>
+        {tabledata()}
+      </table>
     </div>
   )
 }
