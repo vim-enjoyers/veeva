@@ -47,7 +47,7 @@ const Index = () => {
           <div className="w-full max-w-lg flex justify-end flex-none p-4 pt-0">
             <span className="text-gray-800 text-xs">
               or,&nbsp;
-              <a href="/prescriber_data.csv" className="cursor-pointer hover:underline text-black" download>
+              <a href="/prescriber_data.csv" className="cursor-pointer hover:underline" download>
                 click here to download default data
               </a>
               .
@@ -56,7 +56,7 @@ const Index = () => {
           {fileReady ? (
             <div className="flex justify-center pb-4">
               <Link href="/?report=true" shallow>
-                <a className="text-white font-bold px-4 py-4 text-md bg-gray-800 rounded-lg shadow hover:shadow-lg">Generate Report</a>
+                <a className="text-white font-bold px-4 py-4 text-md bg-orange rounded-lg shadow hover:shadow-lg">Generate Report</a>
               </Link>
             </div>
           ) : null}
