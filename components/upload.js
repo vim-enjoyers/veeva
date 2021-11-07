@@ -1,10 +1,25 @@
 import React from 'react'
 import { render } from 'react-dom';
-import { CSVReader } from 'react-papaparse'
+import { CSVReader, readRemoteFile } from 'react-papaparse'
 
 const buttonRef = React.createRef();
 
-export default class UploadButton extends React.Component {
+export default class Upload extends React.Component {
+  constructor(props) {
+    super(props)
+    // this.state = {
+    //   fileReady: false
+    // }
+  }
+
+  // componentDidUpdate(prevProps) {
+  //   const { pathname, query } = this.props.router
+  //   // verify props have changed to avoid an infinite loop
+  //   if (this.state.fileReady !== prevProps.router.query.counter) {
+  //     // fetch data based on the new query
+  //   }
+  // }
+
   handleOpenDialog = (e) => {
     // Note that the ref is set async, so it might be null at some point
     if (buttonRef.current) {
@@ -43,18 +58,21 @@ export default class UploadButton extends React.Component {
     console.log(doctorData)
     console.log('---------------------------')
     this.props.onFileLoad(doctorData)
+    this.props.isFileReady(true)
   }
 
   handleOnError = (err, file, inputElem, reason) => {
     console.log('---------------------------')
     console.log(err)
     console.log('---------------------------')
+    this.props.isFileReady(false)
   }
 
   handleOnRemoveFile = (data) => {
     console.log('---------------------------')
     console.log(data)
     console.log('---------------------------')
+    this.props.isFileReady(false)
   }
 
   handleRemoveFile = (e) => {
@@ -62,60 +80,23 @@ export default class UploadButton extends React.Component {
     if (buttonRef.current) {
       buttonRef.current.removeFile(e);
     }
-  };
+  }
 
   render() {
     return (
       <CSVReader
-        ref={buttonRef}
         onFileLoad={this.handleOnFileLoad}
         onError={this.handleOnError}
-        noClick
-        noDrag
+        style={{}}
         config={
           {
             header: true
           }
         }
-        style={{}}
+        addRemoveButton
         onRemoveFile={this.handleOnRemoveFile}
       >
-        {({ file }) => (
-          <aside
-            className="py-8 flex justify-center"
-          >
-            <button
-              type="button"
-              className="bg-gray-800 text-white font-bold px-4 rounded ml-4"
-              onClick={this.handleOpenDialog}
-            >
-              Browse file
-            </button>
-            <div
-              className="mx-4"
-              style={{
-                borderWidth: 1,
-                borderStyle: 'solid',
-                borderColor: '#ccc',
-                height: 45,
-                lineHeight: 2.5,
-                marginTop: 5,
-                marginBottom: 5,
-                paddingLeft: 13,
-                paddingTop: 3,
-                width: '40%',
-              }}
-            >
-              {file && file.name}
-            </div>
-            <button
-              className="bg-gray-800 text-white font-bold px-4 rounded mr-4"
-              onClick={this.handleRemoveFile}
-            >
-              Remove
-            </button>
-          </aside>
-        )}
+        <span>Drop CSV file here or click to upload.</span>
       </CSVReader>
     )
   }
