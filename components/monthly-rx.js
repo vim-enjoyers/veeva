@@ -33,10 +33,7 @@ const MonthlyRx = (doctor_data) => {
     ],
   };
 
-  return (<>
-    {/* {console.log(doctor_data.data)} */}
-    <Bar data={data} options={options} />
-  </>)
+  return <Bar data={data} options={options} />
 
 };
 
