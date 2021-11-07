@@ -1,4 +1,4 @@
-function linearRegression(x, y){
+function LinearRegression(x, y){
   var slope;
   var intercept;
   var n = y.length;
