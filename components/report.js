@@ -111,7 +111,7 @@ const Report = ({ data }) => {
           <p className="uppercase text-xs text-bold">First doctor's monthly total prescriptions</p>
           <ShowTotalMonthly data={data} />
         </div>
-        {/* <div className="flex flex-col space-y-4">
+        <div className="flex flex-col space-y-4">
           <p className="uppercase text-xs text-bold">Average Growth Rate for each Drug</p>
           <PredictBestDrug data={data} />
         </div>
@@ -122,7 +122,7 @@ const Report = ({ data }) => {
         {/* <div className="flex flex-col space-y-4">
           <p className="uppercase text-xs text-bold">New Prescriptions Per Month</p>
           <CreateNewMostPopularDrug data={data} />
-        </div> */}
+        </div>
         <div className="flex flex-col space-y-4">
           <p className="uppercase text-xs text-bold">Top-Selling Doctors</p>
           <GetBestDoctor data={filterIfNecessary(data)} />
@@ -176,28 +176,31 @@ const GetBestDoctor = ({ data }) => {
 const PredictBestDrug = (data) => {
 
   //Key: Product, Value: Sums of Each Month
+
+  var dataCopy = JSON.parse(JSON.stringify(data));
+
   var map = new Map()
 
   var drugTypes = new Array()
 
-  for (let i = 0; i < data.length; i++) {
-    if (!map.has(data[i].product)) {
+  for (let i = 0; i < dataCopy.length; i++) {
+    if (!map.has(dataCopy[i].product)) {
       var nrx = new Array()
-      for (let j = 0; j < data[i].new_rx.length; j++) {
-        nrx[j] = data[i].new_rx[j]
+      for (let j = 0; j < dataCopy[i].new_rx.length; j++) {
+        nrx[j] = dataCopy[i].new_rx[j]
       }
-      map.set(data[i].product, nrx)
-      drugTypes.push(data[i].product)
+      map.set(dataCopy[i].product, nrx)
+      drugTypes.push(dataCopy[i].product)
     }
 
     else {
-      var temp = map.get(data[i].product)
+      var temp = map.get(dataCopy[i].product)
       for (let j = 0; j < temp.length; j++) {
         //If it DID contain the product, update all values.
-        temp[j] += data[i].new_rx[j]
+        temp[j] += dataCopy[i].new_rx[j]
       }
 
-      map.set(data[i].product, temp)
+      map.set(dataCopy[i].product, temp)
     }
 
     var growth_rates = new Array()
@@ -240,22 +243,24 @@ const ShowTotalMonthly = ({ data }) => {
 }
 
 const CreateTotalMostPopularDrug = ({ data }) => {
+  var dataCopy = JSON.parse(JSON.stringify(data));
+
   const totalMap = new Map();
   const newMap = new Map();
-  for (let i = 0; i < data.length; i++) {
-    if (!(totalMap.has(data[i].product))) {
-      totalMap.set(data[i].product, data[i].total_rx);
-      newMap.set(data[i].product, data[i].new_rx);
+  for (let i = 0; i < dataCopy.length; i++) {
+    if (!(totalMap.has(dataCopy[i].product))) {
+      totalMap.set(dataCopy[i].product, dataCopy[i].total_rx);
+      newMap.set(dataCopy[i].product, dataCopy[i].new_rx);
     }
     else {
-      const tempTotal = totalMap.get(data[i].product)
-      const tempNew = newMap.get(data[i].product);
+      const tempTotal = totalMap.get(dataCopy[i].product)
+      const tempNew = newMap.get(dataCopy[i].product);
       for (let j = 0; j < tempTotal.length; j++) {
-        tempTotal[j] += data[i].total_rx[j];
-        tempNew[j] += data[i].new_rx[j];
+        tempTotal[j] += dataCopy[i].total_rx[j];
+        tempNew[j] += dataCopy[i].new_rx[j];
       }
-      totalMap.set(data[i].product, tempTotal);
-      newMap.set(data[i].product, tempNew);
+      totalMap.set(dataCopy[i].product, tempTotal);
+      newMap.set(dataCopy[i].product, tempNew);
       // console.log(totalMap);
       // console.log(newMap);
     }
@@ -268,17 +273,19 @@ const CreateTotalMostPopularDrug = ({ data }) => {
 }
 
 const CreateNewMostPopularDrug = ({ data }) => {
+  var dataCopy = JSON.parse(JSON.stringify(data));
+
   const newMap = new Map();
-  for (let i = 0; i < data.length; i++) {
-    if (!(newMap.has(data[i].product))) {
-      newMap.set(data[i].product, data[i].new_rx);
+  for (let i = 0; i < dataCopy.length; i++) {
+    if (!(newMap.has(dataCopy[i].product))) {
+      newMap.set(dataCopy[i].product, dataCopy[i].new_rx);
     }
     else {
-      const tempNew = newMap.get(data[i].product);
+      const tempNew = newMap.get(dataCopy[i].product);
       for (let j = 0; j < tempNew.length; j++) {
-        tempNew[j] += data[i].new_rx[j];
+        tempNew[j] += dataCopy[i].new_rx[j];
       }
-      newMap.set(data[i].product, tempNew);
+      newMap.set(dataCopy[i].product, tempNew);
       // console.log(totalMap);
       // console.log(newMap);
     }
