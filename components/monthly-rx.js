@@ -1,7 +1,7 @@
 import React from 'react';
 import { Bar } from 'react-chartjs-2';
 
-const MonthlyRx = ( doctor_data ) => {
+const MonthlyRx = (doctor_data) => {
 
   const options = {
     scales: {
@@ -23,23 +23,24 @@ const MonthlyRx = ( doctor_data ) => {
         data: doctor_data.data,
         backgroundColor: [
           'rgba(54, 162, 235, 0.3)',
-      ],
-      borderColor: [
+        ],
+        borderColor: [
           'rgba(54, 162, 235, 1)',
-      ],
+        ],
         borderWidth: 1.2,
       },
     ],
   };
 
   return (
-  <>
-    <div className="py-8">
-      <div className="">
-        <Bar data={data} options={options} />
+    <>
+      <div className="py-8">
+        <div className="">
+          <Bar data={data} options={options} />
+        </div>
       </div>
-    </div>
-  </>
-)};
+    </>
+  )
+};
 
 export default MonthlyRx;
