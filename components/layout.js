@@ -24,7 +24,7 @@ const Layout = ({ children }) => {
           </div>
         </main>
         <footer className="flex-none bg-footer text-lightgray text-sm h-12 w-full flex items-center justify-center px-8 text-center">
-          <h6 className="max-w-md">&copy; Vim Enjoyers 2021. Made at HACKOHI/O 2021.</h6>
+          <h6 className="max-w-lg">&copy; Vim Enjoyers 2021. Made at HACKOHI/O 2021. <a className="underline hover:opacity-70 font-normal normal-case" href="https://github.com/vim-enjoyers/veeva">View on GitHub</a></h6>
         </footer>
       </div >
     </>
