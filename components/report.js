@@ -144,13 +144,16 @@ const Report = ({ data }) => {
 
           </div>
         </div>
+        <div className="flex flex-col space-y-4">
+          <p className="uppercase text-xs text-bold">Testing Linear Regressions</p>
+          <FindUpAndComingDoctors data={data} />
+        </div>
       </div>
     </div>
   )
 }
 
 const GetBestDoctor = ({ data }) => {
-
   var dataCopy = JSON.parse(JSON.stringify(data));
 
   if (dataCopy.length == 0) {
@@ -193,6 +196,7 @@ const GetBestDoctor = ({ data }) => {
   )
 }
 
+/* FUNCTION TO FIND THE AVERAGE GROWTH RATES OF NRx PER DRUG, COUNTRYWIDE. */
 const PredictBestDrug = (data) => {
 
   //Key: Product, Value: Sums of Each Month
@@ -244,6 +248,7 @@ const PredictBestDrug = (data) => {
   )
 }
 
+/* HELPER FUNCTION: REDIRECTS TO GRAPH CREATION OF DOCTOR NRx VALUES. */
 const ShowNewMonthly = ({ data }) => {
   const doctor = data[0]
   return (
@@ -253,6 +258,7 @@ const ShowNewMonthly = ({ data }) => {
   )
 }
 
+/* HELPER FUNCTION: REDIRECTS TO GRAPH CREATION OF DOCTOR TRx VALUES. */
 const ShowTotalMonthly = ({ data }) => {
   const doctor = data[0];
   return (
@@ -262,6 +268,7 @@ const ShowTotalMonthly = ({ data }) => {
   )
 }
 
+/* CALCULATES A MAP<PRODUCT, Total TRx> FOR EACH DRUG. REDIRECTS TO GRAPH CREATION. */
 const CreateTotalMostPopularDrug = ({ data }) => {
   var dataCopy = JSON.parse(JSON.stringify(data));
 
@@ -316,6 +323,64 @@ const CreateNewMostPopularDrug = ({ data }) => {
       <NewPopularRx newMap={newMap} />
     </div>
   )
+}
+
+/* UTILIZES LINEAR REGRESSION TO FIND THE DOCTOR WHOSE LIKELY TO BE A VERY POPULAR PRESCRIBER IN THE FUTURE. */
+/* ASSUMES ALL DOCTORS ARE UNIQUE */
+const FindUpAndComingDoctors = ({ data }) => {
+
+  /* K= [Last,First] V=[slope, intercept] */
+  var namesAndEquations = new Map();
+  var pairs = new Array();
+  var months = new Array();
+  var NRx = new Array();
+  var slopeAndIntercept = new Array();
+
+  for (let i = 0; i < data.length; i++) {
+
+    for (let j = 0; j < data[i].new_rx.length; j++) {
+      months[j] = j;
+      NRx[j] = data[i].new_rx[j];
+    }
+
+    slopeAndIntercept = linearRegression(months, NRx);
+    namesAndEquations.set([data[i].last_name, data[i].first_name], slopeAndIntercept)
+    pairs.push(slopeAndIntercept);
+  }
+  console.log(namesAndEquations)
+
+  //TODO: IMPLEMENT FUNCTION TO GRAPH(?)
+  return (
+    <div>
+
+    </div>
+  )
+}
+
+function linearRegression(x, y) {
+  var slope;
+  var intercept;
+  var n = y.length;
+  var sum_x = 0;
+  var sum_y = 0;
+  var sum_xy = 0;
+  var sum_xx = 0;
+  var sum_yy = 0;
+
+  for (let i = 0; i < y.length; i++) {
+    sum_x += x[i];
+    sum_y += y[i];
+    sum_xy += (x[i] * y[i]);
+    sum_xx += (x[i] * x[i]);
+    sum_yy += (y[i] * y[i]);
+  }
+
+  slope = (n * sum_xy - sum_x * sum_y) / (n * sum_xx - sum_x * sum_x);
+  intercept = (sum_y - slope * sum_x) / n;
+
+  //R^2 may be useful later.
+
+  return [slope, intercept];
 }
 
 export default Report
