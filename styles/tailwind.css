@@ -44,7 +44,7 @@
   }
 
   .report-table tr{
-    @apply text-xl;
+    @apply text-lg;
   }
 
   .report-table th {
@@ -52,7 +52,7 @@
   }
 
   .report-table td:not(:first-child){
-    width: 300px;
+    width: 260px;
   }
 }
 

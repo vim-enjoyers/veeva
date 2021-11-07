@@ -131,38 +131,14 @@ const Report = ({ data }) => {
           <h2>Total Prescriptions</h2>
           <div className="grid md:grid-cols-2 gap-8 text-center w-full">
             <div className="flex flex-col space-y-4 w-full">
-              <CreateTotalMostPopularDrug data={data} />
+              <CreateTotalMostPopularDrug data={data} drugFilter={drugFilter} />
               <h6 className="uppercase text-xs text-bold">Total Prescriptions Per Month</h6>
             </div>
             <div className="flex flex-col space-y-4 w-full">
-              <CreateNewMostPopularDrug data={data} />
+              <CreateNewMostPopularDrug data={data} drugFilter={drugFilter} />
               <h6 className="uppercase text-xs text-bold">New Prescriptions Per Month</h6>
             </div>
           </div>
-        </div>
-
-        <div className="grid md:grid-cols-2 gap-8 text-center w-full">
-          <div className="flex flex-col space-y-4 w-full">
-            <h6 className="uppercase text-xs text-bold w-full">First doctor's monthly new prescriptions</h6>
-            <ShowNewMonthly data={data} />
-          </div>
-          <div className="flex flex-col space-y-4 w-full">
-            <h6 className="uppercase text-xs text-bold">First doctor's monthly total prescriptions</h6>
-            <ShowTotalMonthly data={data} />
-          </div>
-          <div className="flex flex-col space-y-4 w-full">
-            <h6 className="uppercase text-xs text-bold">Average Growth Rate for each Drug</h6>
-            <PredictBestDrug data={data} />
-          </div>
-
-          <div className="flex flex-col space-y-4 w-full">
-            <h6 className="uppercase text-xs text-bold">Top-Selling Doctors</h6>
-
-          </div>
-        </div>
-        <div className="flex flex-col space-y-4">
-          <p className="uppercase text-xs text-bold">Testing Linear Regressions</p>
-
         </div>
       </div>
     </div>
@@ -285,9 +261,8 @@ const ShowTotalMonthly = ({ data }) => {
 }
 
 /* CALCULATES A MAP<PRODUCT, Total TRx> FOR EACH DRUG. REDIRECTS TO GRAPH CREATION. */
-const CreateTotalMostPopularDrug = ({ data }) => {
+const CreateTotalMostPopularDrug = ({ data, drugFilter }) => {
   var dataCopy = JSON.parse(JSON.stringify(data));
-
   const totalMap = new Map();
   const newMap = new Map();
   for (let i = 0; i < dataCopy.length; i++) {
@@ -310,12 +285,12 @@ const CreateTotalMostPopularDrug = ({ data }) => {
   }
   return (
     <div>
-      <PopularRx totalMap={totalMap} />
+      <PopularRx totalMap={totalMap} drugFilter={drugFilter} />
     </div>
   )
 }
 
-const CreateNewMostPopularDrug = ({ data }) => {
+const CreateNewMostPopularDrug = ({ data, drugFilter }) => {
   var dataCopy = JSON.parse(JSON.stringify(data));
 
   const newMap = new Map();
@@ -336,7 +311,7 @@ const CreateNewMostPopularDrug = ({ data }) => {
   return (
     <div>
 
-      <NewPopularRx newMap={newMap} />
+      <NewPopularRx newMap={newMap} drugFilter={drugFilter} />
     </div>
   )
 }
