@@ -1,5 +1,7 @@
 import MonthlyRx from './monthly-rx.js'
 import PopularRx from './popular-rx.js'
+import CountryDrugGrowthRates from './CountryDrugGrowthRates.js'
+
 
 const Report = ({ data }) => {
   return (
@@ -17,10 +19,62 @@ const Report = ({ data }) => {
           <ShowTotalMonthly data={data} />
         </div>
         <div className="flex flex-col space-y-4">
+          <p className="uppercase text-xs text-bold">Average Growth Rate for each Drug</p>
+          <PredictBestDrug data={data} />
+        </div>
+        <div className="flex flex-col space-y-4">
           <p className="uppercase text-xs text-bold">Total Prescriptions Per Month</p>
           <CreateMostPopularDrug data={data} />
         </div>
       </div>
+    </div>
+  )
+}
+
+const PredictBestDrug = (data) => {
+
+  //Key: Product, Value: Sums of Each Month
+  var map = new Map()
+
+  var drugTypes = new Array()
+
+  for (let i = 0; i < data.length; i++) {
+    if (!map.has(data[i].product)) {
+      var nrx = new Array()
+      for (let j = 0; j < data[i].new_rx.length; j++) {
+        nrx[j] = data[i].new_rx[j]
+      }
+      map.set(data[i].product, nrx)
+      drugTypes.push(data[i].product)
+    }
+
+    else {
+      var temp = map.get(data[i].product)
+      for (let j = 0; j < temp.length; j++) {
+        //If it DID contain the product, update all values.
+        temp[j] += data[i].new_rx[j]
+      }
+
+      map.set(data[i].product, temp)
+    }
+
+    var growth_rates = new Array()
+    var nrxSums
+
+    for (let p = 0; p < map.length; p++) {
+      nrxSums = map.get(drugTypes[p])
+
+      sum = 0
+      for (let k = 0; k < nrxSums.length - 1; k++) {
+        sum += ((nrxSums[k + 1] - nrxSums[k]) / nrxSums[k])
+      }
+      growth_rates.push((sum / 5))
+    }
+  }
+
+  return (
+    <div>
+      <CountryDrugGrowthRates data={growth_rates} />
     </div>
   )
 }
