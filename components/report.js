@@ -3,8 +3,7 @@ import MonthlyRx from './monthly-rx.js'
 import PopularRx from './popular-rx.js'
 import NewPopularRx from './newpopular-rx'
 import DrugGrowthRates from './drug-growth-rates.js'
-import { forIn } from 'lodash'
-
+import ProductBreakdown from './product-breakdown.js'
 const Report = ({ data }) => {
   const [drugFilter, setDrugFilter] = useState("All")
   const [stateFilter, setStateFilter] = useState("All")
@@ -25,7 +24,7 @@ const Report = ({ data }) => {
         <div className="flex flex-col">
           {generateStateFilters()}
         </div>
-        {drugFilter !== stateFilter ? <a className="text-sm underline cursor-pointer" onClick={clearFilters}>Clear Filters</a> : null}
+        {drugFilter !== stateFilter ? <a className="text-sm underline cursor-pointer" onClick={clearFilters}>Clear Filters</a> : <a className="invisible text-sm underline">Filters already cleared</a>}
       </div>
     </>)
   }
@@ -64,7 +63,7 @@ const Report = ({ data }) => {
     ))
 
     return (<>
-      <label htmlFor="states">State</label>
+      <label htmlFor="states">State:</label>
       <select className="border border-gray-500 py-1 px-4 rounded-lg w-min" name="states" value={stateFilter} onChange={event => setStateFilter(event.target.value)}>
         <option value="All">All</option>
         {states}
@@ -83,7 +82,7 @@ const Report = ({ data }) => {
         // console.log('product: ' + doctor.product)
         return (doctor.product === drugFilter)
       })
-      console.log("result after: ", result)
+      // console.log("result after: ", result)
     }
     if (stateFilter !== "All") {
       result = result.filter(doctor => doctor.state === stateFilter)
@@ -94,16 +93,55 @@ const Report = ({ data }) => {
 
   const displayFirst = () => {
     const filteredData = filterIfNecessary(dataCopy)
-    console.log(filteredData[0])
+    // console.log(filteredData[0])
     return (
       <h4>The first doctor in the array is {filteredData[0].first_name} {filteredData[0].last_name}.</h4>
     )
   }
 
+  const getMostPopular = () => {
+    var dataCopy = JSON.parse(JSON.stringify(data))
+
+    const uniqueDrugs = [...new Set(dataCopy.map(item => item.product))].sort()
+    uniqueDrugs = uniqueDrugs.filter(function (element) {
+      return element !== undefined;
+    })
+
+    var dataCopyDrugs = uniqueDrugs.map(drug =>
+    ({
+      name: drug,
+      total_prescriptions: (dataCopy.filter(doctor => {
+        return (doctor.product === drug)
+      }).reduce((previousValue, currentValue) => previousValue + currentValue.total_rx.reduce((previousValue2, currentValue2) => previousValue2 + currentValue2, 0), 0))
+    })
+
+    )
+
+    dataCopyDrugs = dataCopyDrugs.sort((a, b) => {
+      if (a.total_prescriptions > b.total_prescriptions) {
+        return -1
+      } else {
+        return 1
+      }
+    })
+
+    let drugsSum = dataCopyDrugs.reduce((previousValue, currentValue) => previousValue + currentValue.total_prescriptions, 0)
+    let drugsPercent = ((dataCopyDrugs[0].total_prescriptions / drugsSum) * 100.0).toFixed(2)
+    return <p>The most popular prescription is {dataCopyDrugs[0].name}, which made up {drugsPercent}% of all medications prescribed by doctors during the period.</p>
+  }
+
+  const getUSState = (name) => {
+    var dataCopy = JSON.parse(JSON.stringify(data))
+    let singleDoctor = dataCopy.filter.filter(doctor => {
+      return (name === `${doctor.first_name} ${doctor.last_name}`)
+    })
+    return singleDoctor.state
+  }
+
   return (
     <div className="w-full">
       <h1 className="">Prescriber Data Report</h1>
-      <h3 className="" >Generated at {/* TODO: Add time of generation. */}</h3>
+      <h3 className="" >Generated {new Date().toLocaleString()}</h3>
       {/* <p>The first doctor's name is {data[0].first_name}.</p> */}
 
 
@@ -113,10 +151,12 @@ const Report = ({ data }) => {
       <div className="mt-16 w-full flex flex-col space-y-12">
         <div>
           <h2>Top-Prescribing Doctors</h2>
+          <p>This is a list of the doctors who write the most prescriptions for their patients.</p>
           <GetBestDoctor data={filterIfNecessary(data)} />
         </div>
         <div>
           <h2>Trending Doctors</h2>
+          <p>This list is a prediction of the best doctors to target. These doctors are on the upward trend and are increasing their new prescriptions. The predictions are calculated via linear regression of recent new prescription data. Change the term length to adjust the predictions.</p>
           <select className="my-2 border border-gray-500 py-1 px-4 rounded-lg w-min" name="trendingterm" value={futureMonths} onChange={event => setFutureMonths(event.target.value)}>
             <option value={1}>Short Term (1 month)</option>
             <option value={6}>Medium Term (6 months)</option>
@@ -128,13 +168,26 @@ const Report = ({ data }) => {
                 <th className="pl-4"></th>
                 <th className="px-4 ">Name</th>
                 <th className="px-4">Predicted New Prescriptions in {futureMonths} Month{futureMonths > 1 ? "s" : null}</th>
+                <th className="px-4">State</th>
               </tr>
               <FindLinearRegressions data={filterIfNecessary(data)} future={futureMonths} />
             </table>
           </div>
         </div>
-        <div>
+        <div className="flex flex-col space-y-4" >
+          <h2>Product Breakdown</h2>
+          <div className="grid md:grid-cols-3 gap-6">
+            <div className="">
+              <ProductBreakdown data={data} />
+            </div>
+            <div className="p-8 md:col-span-2">
+              {getMostPopular()}
+            </div>
+          </div>
+        </div>
+        <div className="flex flex-col space-y-2">
           <h2>Total Prescriptions</h2>
+          <p>Line graphs of the trends in both total prescriptions per month and new prescriptions per month of each medication. Adjust the filters at the top of the page to isolate specific medications.</p>
           <div className="grid md:grid-cols-2 gap-8 text-center w-full">
             <div className="flex flex-col space-y-4 w-full">
               <CreateTotalMostPopularDrug data={data} drugFilter={drugFilter} />
@@ -151,8 +204,10 @@ const Report = ({ data }) => {
   )
 }
 
+
+
 const GetBestDoctor = ({ data }) => {
-  var dataCopy = JSON.parse(JSON.stringify(data));
+  var dataCopy = JSON.parse(JSON.stringify(data))
 
   if (dataCopy.length == 0) {
     return <h3>No data available under current filters.</h3>
@@ -174,6 +229,7 @@ const GetBestDoctor = ({ data }) => {
           <td className="font-bold pr-4">{i + 1}.</td>
           <td className="px-4">{sortedData[i].first_name + " " + sortedData[i].last_name}</td>
           <td className="px-4">{sortedData[i].total_rx.reduce((a, b) => a + b, 0)}</td>
+          <td className="px-4">{sortedData[i].state}</td>
         </tr>
       )
     }
@@ -187,6 +243,7 @@ const GetBestDoctor = ({ data }) => {
           <th className="pr-4"></th>
           <th className="px-4">Name</th>
           <th className="px-4">Total Prescriptions</th>
+          <th className="px-4">State</th>
         </tr>
         {tabledata()}
       </table>
@@ -339,17 +396,17 @@ const FindLinearRegressions = ({ data, future }) => {
       NRx[j] = dataCopy[i].new_rx[j]
     }
     slopeAndIntercept = LinearRegression(months, NRx);
-    namesAndEquations.push([dataCopy[i].first_name, dataCopy[i].last_name, slopeAndIntercept[0], slopeAndIntercept[1]])
+    namesAndEquations.push([dataCopy[i].first_name, dataCopy[i].last_name, slopeAndIntercept[0], slopeAndIntercept[1], dataCopy[i].state])
   }
 
-  console.log(namesAndEquations)
+  // console.log(namesAndEquations)
 
   //TODO: IMPLEMENT FUNCTION TO GRAPH(?)
   return <PredictGrowingDoctors namesAndEquations={namesAndEquations} months={future} />
 }
 
 const PredictGrowingDoctors = ({ namesAndEquations, months }) => {
-  console.log(months)
+  // console.log(months)
   var prediction;
   var slope;
   var intercept;
@@ -357,6 +414,7 @@ const PredictGrowingDoctors = ({ namesAndEquations, months }) => {
   var lastName;
   var nameAndPrediction = new Array();
   var fullName;
+  var uSState
 
   // console.log(namesAndEquations);
   // console.log(name)
@@ -365,10 +423,11 @@ const PredictGrowingDoctors = ({ namesAndEquations, months }) => {
     intercept = namesAndEquations[i][3];
     firstName = namesAndEquations[i][0];
     lastName = namesAndEquations[i][1];
+    uSState = namesAndEquations[i][4]
 
     prediction = (slope * (months + 6)) + intercept;
     fullName = firstName + " " + lastName;
-    nameAndPrediction.push([fullName, prediction]);
+    nameAndPrediction.push([fullName, prediction, uSState]);
   }
 
   const sortedPredictions = nameAndPrediction.sort((a, b) => {
@@ -389,6 +448,7 @@ const PredictGrowingDoctors = ({ namesAndEquations, months }) => {
           <td className="font-bold pr-4">{i + 1}.</td>
           <td className="px-4">{sortedPredictions[i][0]}</td>
           <td className="px-4">{sortedPredictions[i][1].toFixed(2)}</td>
+          <td className="px-4">{sortedPredictions[i][2]}</td>
         </tr>
       )
     }

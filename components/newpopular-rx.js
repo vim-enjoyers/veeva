@@ -60,7 +60,7 @@ const NewPopularRx = ({ newMap, drugFilter }) => {
   })
 
   const data = {
-    labels: ['1', '2', '3', '4', '5', '6'],
+    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
     datasets: allDatasets,
   };
 

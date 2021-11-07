@@ -61,19 +61,11 @@ const PopularRx = ({ totalMap, drugFilter }) => {
   })
 
   const data = {
-    labels: ['1', '2', '3', '4', '5', '6'],
+    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
     datasets: allDatasets
   };
 
-  return (
-    <>
-      <div className='header'>
-
-      </div>
-      {console.log(totalMap)}
-      <Line data={data} options={options} />
-    </>
-  )
+  return <Line data={data} options={options} />
 };
 
 export default PopularRx;
