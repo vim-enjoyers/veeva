@@ -1,24 +1,12 @@
 import React from 'react'
-import { render } from 'react-dom';
-import { CSVReader, readRemoteFile } from 'react-papaparse'
+import { CSVReader } from 'react-papaparse'
 
 const buttonRef = React.createRef();
 
 export default class Upload extends React.Component {
   constructor(props) {
     super(props)
-    // this.state = {
-    //   fileReady: false
-    // }
   }
-
-  // componentDidUpdate(prevProps) {
-  //   const { pathname, query } = this.props.router
-  //   // verify props have changed to avoid an infinite loop
-  //   if (this.state.fileReady !== prevProps.router.query.counter) {
-  //     // fetch data based on the new query
-  //   }
-  // }
 
   handleOpenDialog = (e) => {
     // Note that the ref is set async, so it might be null at some point
