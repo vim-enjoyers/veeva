@@ -3,15 +3,23 @@ import MonthlyRx from './monthly-rx.js'
 import PopularRx from './popular-rx.js'
 import NewPopularRx from './newpopular-rx'
 import CountryDrugGrowthRates from './CountryDrugGrowthRates.js'
+import { forIn } from 'lodash'
 
 const Report = ({ data }) => {
-  const [drugFilter, setDrugFilter] = useState("Cholecap")
-  const [stateFilter, setStateFilter] = useState("Illinois")
+  const [drugFilter, setDrugFilter] = useState("All")
+  const [stateFilter, setStateFilter] = useState("All")
 
   const generateFilters = () => {
     return (<>
-      {generateDrugFilters()}
-      {generateStateFilters()}
+      <div className="my-4 flex flex-col space-y-4">
+        <h4>Filter Results</h4>
+        <div className="flex flex-col">
+          {generateDrugFilters()}
+        </div>
+        <div className="flex flex-col">
+          {generateStateFilters()}
+        </div>
+      </div>
     </>)
   }
 
@@ -21,13 +29,21 @@ const Report = ({ data }) => {
       return element !== undefined;
     })
     const drugs = uniqueDrugs.map(drug => (
-      <><input type="radio" name="drugs" value={drug} checked={drugFilter === drug} onChange={event => { setDrugFilter(event.target.value) }} />&nbsp;{drug}</>
+      <label className={`flex flex-row items-center border border-gray-500 py-1 px-4 rounded-lg ${drugFilter === drug ? "bg-blue-500 text-white border-transparent" : null}`}>
+        <input className="appearance-none" type="radio" name="drugs" value={drug} checked={drugFilter === drug} onChange={event => { setDrugFilter(event.target.value) }} />
+        <span>{drug}</span>
+      </label>
     ))
 
     return (<>
       <label htmlFor="drugs">Products:</label>
-      <input type="radio" name="drugs" value="All" checked={drugFilter === "All"} onChange={event => setDrugFilter(event.target.value)} />&nbsp;All
-      {drugs}
+      <div className="flex flex-row space-x-4">
+        <label className={`flex flex-row items-center border border-gray-500 py-1 px-4 rounded-lg ${drugFilter === "All" ? "bg-blue-500 text-white border-transparent" : null}`}>
+          <input className="appearance-none" type="radio" name="drugs" value="All" checked={drugFilter === "All"} onChange={event => setDrugFilter(event.target.value)} />
+          <span>All</span>
+        </label>
+        {drugs}
+      </div>
     </>)
   }
 
@@ -41,8 +57,8 @@ const Report = ({ data }) => {
     ))
 
     return (<>
-      <label htmlFor="states">State:</label>
-      <select name="states" value={stateFilter} onChange={event => setStateFilter(event.target.value)}>
+      <label htmlFor="states">State</label>
+      <select className="border border-gray-500 py-1 px-4 rounded-lg w-min" name="states" value={stateFilter} onChange={event => setStateFilter(event.target.value)}>
         <option value="All">All</option>
         {states}
       </select>
@@ -80,13 +96,13 @@ const Report = ({ data }) => {
       <h1 className="text-3xl font-bold">Prescriber Data Report</h1>
       <h3 className="text-lg font-bold" >Generated at {/* TODO: Add time of generation. */}</h3>
       {/* <p>The first doctor's name is {data[0].first_name}.</p> */}
-      <h4>Filter</h4>
+
 
       {generateFilters()}
 
-      {displayFirst()}
+      {/* {displayFirst()} */}
 
-      <div className="grid md:grid-cols-2 gap-8 mt-8 text-center">
+      <div className="grid md:grid-cols-2 gap-8 mt-16 text-center">
         <div className="flex flex-col space-y-4">
           <p className="uppercase text-xs text-bold w-full">First doctor's monthly new prescriptions</p>
           <ShowNewMonthly data={data} />
@@ -109,7 +125,7 @@ const Report = ({ data }) => {
         </div> */}
         <div className="flex flex-col space-y-4">
           <p className="uppercase text-xs text-bold">Top-Selling Doctors</p>
-          <GetBestDoctor data={data} />
+          <GetBestDoctor data={filterIfNecessary(data)} />
         </div>
       </div>
     </div>
@@ -117,9 +133,9 @@ const Report = ({ data }) => {
 }
 
 const GetBestDoctor = ({ data }) => {
-
-  console.warn(data)
-
+  if (data.length == 0) {
+    return <h3>No data available under current filters.</h3>
+  }
   const reducer = (previousValue, currentValue) => previousValue + currentValue
   const sortedData = data.sort((a, b) => {
     if (a.total_rx.reduce(reducer, 0) > b.total_rx.reduce(reducer, 0)) {
@@ -129,33 +145,29 @@ const GetBestDoctor = ({ data }) => {
     }
   })
 
+  const tabledata = () => {
+    let result = []
+    for (let i = 0; i < Math.min(sortedData.length, 5); i += 1) {
+      result.push(
+        <tr>
+          <td className="font-bold px-4">{i + 1}</td>
+          <td className="text-left px-4">{sortedData[i].first_name + " " + sortedData[0].last_name}</td>
+          <td className="px-4">{sortedData[i].total_rx.reduce((a, b) => a + b, 0)}</td>
+        </tr>
+      )
+    }
+    return result
+  }
+
   return (
     <div className="flex justify-center">
-      <table className="table-auto border border-black">
+      <table className="table-auto border border-black p-4">
         <tr className="font-bold">
-          <th>Doctor</th>
-          <th>Total Drugs Sold</th>
+          <th className="px-4"></th>
+          <th className="px-4">Doctor</th>
+          <th className="px-4">Total Drugs Sold</th>
         </tr>
-        <tr>
-          <td>{sortedData[0].first_name + " " + sortedData[0].last_name}</td>
-          <td>{sortedData[0].total_rx.reduce((a, b) => a + b, 0)}</td>
-        </tr>
-        <tr>
-          <td>{sortedData[1].first_name + " " + sortedData[1].last_name}</td>
-          <td>{sortedData[1].total_rx.reduce((a, b) => a + b, 0)}</td>
-        </tr>
-        <tr>
-          <td>{sortedData[2].first_name + " " + sortedData[2].last_name}</td>
-          <td>{sortedData[2].total_rx.reduce((a, b) => a + b, 0)}</td>
-        </tr>
-        <tr>
-          <td>{sortedData[3].first_name + " " + sortedData[3].last_name}</td>
-          <td>{sortedData[3].total_rx.reduce((a, b) => a + b, 0)}</td>
-        </tr>
-        <tr>
-          <td>{sortedData[4].first_name + " " + sortedData[4].last_name}</td>
-          <td>{sortedData[4].total_rx.reduce((a, b) => a + b, 0)}</td>
-        </tr>
+        {tabledata()}
       </table>
     </div>
   )
