@@ -22,10 +22,10 @@ const Report = ({ data }) => {
           <p className="uppercase text-xs text-bold">Average Growth Rate for each Drug</p>
           <PredictBestDrug data={data} />
         </div>
-        <div className="flex flex-col space-y-4">
+        {/* <div className="flex flex-col space-y-4">
           <p className="uppercase text-xs text-bold">Total Prescriptions Per Month</p>
           <CreateMostPopularDrug data={data} />
-        </div>
+        </div> */}
       </div>
     </div>
   )
