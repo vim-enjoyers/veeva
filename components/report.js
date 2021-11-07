@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import MonthlyRx from './monthly-rx.js'
 import PopularRx from './popular-rx.js'
 import NewPopularRx from './newpopular-rx'
-import CountryDrugGrowthRates from './CountryDrugGrowthRates.js'
+import DrugGrowthRates from './drug-growth-rates.js'
 import { forIn } from 'lodash'
 
 const Report = ({ data }) => {
@@ -245,7 +245,7 @@ const PredictBestDrug = (data) => {
 
   return (
     <div>
-      <CountryDrugGrowthRates data={growth_rates} />
+      <DrugGrowthRates data={growth_rates} />
     </div>
   )
 }
@@ -343,7 +343,7 @@ const FindLinearRegressions = ({ data, future }) => {
       months[j] = j
       NRx[j] = dataCopy[i].new_rx[j]
     }
-    slopeAndIntercept = linearRegression(months, NRx);
+    slopeAndIntercept = LinearRegression(months, NRx);
     namesAndEquations.push([dataCopy[i].first_name, dataCopy[i].last_name, slopeAndIntercept[0], slopeAndIntercept[1]])
   }
 
@@ -414,7 +414,7 @@ const PredictGrowingDoctors = ({ namesAndEquations, months }) => {
   )
 }
 
-function linearRegression(x, y) {
+function LinearRegression(x, y) {
   var slope;
   var intercept;
   var n = y.length;

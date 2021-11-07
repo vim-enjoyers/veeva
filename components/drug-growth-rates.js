@@ -1,7 +1,7 @@
 import React from "react";
 import { Bar } from 'react-chartjs-2';
 
-const CountryDrugGrowthRates = (growth_rates) => {
+const DrugGrowthRates = (growth_rates) => {
 
   const options = {
     scales: {
@@ -33,4 +33,4 @@ const CountryDrugGrowthRates = (growth_rates) => {
   )
 };
 
-export default CountryDrugGrowthRates
+export default DrugGrowthRates
