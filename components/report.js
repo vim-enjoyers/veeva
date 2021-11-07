@@ -156,7 +156,7 @@ const GetBestDoctor = ({ data }) => {
       result.push(
         <tr>
           <td className="font-bold px-4">{i + 1}</td>
-          <td className="text-left px-4">{sortedData[i].first_name + " " + sortedData[0].last_name}</td>
+          <td className="text-left px-4">{sortedData[i].first_name + " " + sortedData[i].last_name}</td>
           <td className="px-4">{sortedData[i].total_rx.reduce((a, b) => a + b, 0)}</td>
         </tr>
       )
