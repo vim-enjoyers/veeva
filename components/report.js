@@ -1,4 +1,5 @@
 import MonthlyRx from './monthly-rx.js'
+import PopularRx from './popular-rx.js'
 
 const Report = ({ data }) => {
   return (
@@ -8,6 +9,8 @@ const Report = ({ data }) => {
 
       <ShowNewMonthly data={data} />
       <CreateMostPopularDrug data={data} />
+
+
 
     </div>
 
@@ -33,18 +36,20 @@ const CreateMostPopularDrug = ({ data }) => {
     }
     else {
       const tempTotal = totalMap.get(data[i].product)
-      const tempNew = newMap.get(data[i].product)
+      const tempNew = newMap.get(data[i].product);
       for (let j = 0; j < tempTotal.length; j++) {
-        tempTotal += data[i].total_rx[j]
-        tempNew += data[i].new_rx[j]
+        tempTotal[j] += data[i].total_rx[j];
+        tempNew[j] += data[i].new_rx[j];
       }
       totalMap.set(data[i].product, tempTotal);
-      newMap.set(data[i].product, tempNew)
+      newMap.set(data[i].product, tempNew);
+      // console.log(totalMap);
+      // console.log(newMap);
     }
   }
   return (
     <div>
-      <p>{totalMap.get('Cholecap')[0]}</p>
+      <PopularRx totalMap={totalMap} newMap={newMap} />
     </div>
   )
 }

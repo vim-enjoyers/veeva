@@ -1,7 +1,7 @@
 import React from 'react';
 import { Bar } from 'react-chartjs-2';
 
-const MonthlyRx = ( doctor_data ) => {
+const MonthlyRx = (doctor_data) => {
 
   const options = {
     scales: {
@@ -27,12 +27,13 @@ const MonthlyRx = ( doctor_data ) => {
   };
 
   return (
-  <>
-    <div className='header'>
+    <>
+      <div className='header'>
 
-    </div>
-    <Bar data={data} options={options} />
-  </>
-)};
+      </div>
+      <Bar data={data} options={options} />
+    </>
+  )
+};
 
 export default MonthlyRx;
