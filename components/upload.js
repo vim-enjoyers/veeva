@@ -1,6 +1,6 @@
 import React from 'react'
 import { render } from 'react-dom';
-import { CSVReader } from 'react-papaparse'
+import { CSVReader, readRemoteFile } from 'react-papaparse'
 
 const buttonRef = React.createRef();
 
