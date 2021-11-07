@@ -4,7 +4,6 @@ import NewPopularRx from './newpopular-rx'
 import CountryDrugGrowthRates from './CountryDrugGrowthRates.js'
 //import PrintRegressions from './PrintRegressions.js'
 
-
 const Report = ({ data }) => {
   return (
     <div className="w-full">
@@ -20,7 +19,7 @@ const Report = ({ data }) => {
           <p className="uppercase text-xs text-bold">First doctor's monthly total prescriptions</p>
           <ShowTotalMonthly data={data} />
         </div>
-        <div className="flex flex-col space-y-4">
+        {/* <div className="flex flex-col space-y-4">
           <p className="uppercase text-xs text-bold">Average Growth Rate for each Drug</p>
           <PredictBestDrug data={data} />
         </div>
@@ -31,6 +30,10 @@ const Report = ({ data }) => {
         <div className="flex flex-col space-y-4">
           <p className="uppercase text-xs text-bold">New Prescriptions Per Month</p>
           <CreateNewMostPopularDrug data={data} />
+        </div> */}
+        <div className="flex flex-col space-y-4">
+        <p className="uppercase text-xs text-bold">Top-Selling Doctors</p>
+          <GetBestDoctor data={data} />
         </div>
         <div className="flex flex-col space-y-4">
           <p className="uppercase text-xs text-bold">Testing Linear Regressions</p>
@@ -41,7 +44,50 @@ const Report = ({ data }) => {
   )
 }
 
-/* FUNCTION TO FIND THE AVERAGE GROWTH RATES OF NRx PER DRUG, COUNTRYWIDE. */
+const GetBestDoctor = ( {data} ) => {
+
+  console.warn(data)
+
+  const reducer = (previousValue, currentValue) => previousValue + currentValue
+  const sortedData = data.sort((a,b)=>{
+    if (a.total_rx.reduce(reducer, 0) > b.total_rx.reduce(reducer, 0)) {
+      return -1
+    } else {
+      return 1
+  }})
+
+  return (
+    <div className="flex justify-center">
+      <table className="table-auto border border-black">
+        <tr className="font-bold">
+          <th>Doctor</th>
+          <th>Total Drugs Sold</th>
+        </tr>
+        <tr>
+          <td>{sortedData[0].first_name + " " + sortedData[0].last_name}</td>
+          <td>{sortedData[0].total_rx.reduce((a, b) => a + b, 0)}</td>
+        </tr>
+        <tr>
+          <td>{sortedData[1].first_name + " " + sortedData[1].last_name}</td>
+          <td>{sortedData[1].total_rx.reduce((a, b) => a + b, 0)}</td>
+        </tr>
+        <tr>
+          <td>{sortedData[2].first_name + " " + sortedData[2].last_name}</td>
+          <td>{sortedData[2].total_rx.reduce((a, b) => a + b, 0)}</td>
+        </tr>
+        <tr>
+          <td>{sortedData[3].first_name + " " + sortedData[3].last_name}</td>
+          <td>{sortedData[3].total_rx.reduce((a, b) => a + b, 0)}</td>
+        </tr>
+        <tr>
+          <td>{sortedData[4].first_name + " " + sortedData[4].last_name}</td>
+          <td>{sortedData[4].total_rx.reduce((a, b) => a + b, 0)}</td>
+        </tr>
+      </table>
+    </div>
+  )
+}
+
 const PredictBestDrug = (data) => {
 
   //Key: Product, Value: Sums of Each Month
@@ -92,7 +138,7 @@ const PredictBestDrug = (data) => {
 
 /* HELPER FUNCTION: REDIRECTS TO GRAPH CREATION OF DOCTOR NRx VALUES. */
 const ShowNewMonthly = ({ data }) => {
-  const doctor = data[0];
+  const doctor = data[0]
   return (
     <div>
       <MonthlyRx data={doctor.new_rx} />
