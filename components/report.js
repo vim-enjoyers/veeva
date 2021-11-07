@@ -226,7 +226,7 @@ const Report = ({ data }) => {
             <button className="text-white font-bold px-2 py-1 bg-orange rounded-lg shadow hover:shadow-md" type="submit">Search</button>
           </form>
           {showSearchResult ? (<div className="flex flex-col items-center w-full max-w-lg">
-            <div className="flex flex-col space-y-4 w-full">
+            <div className="flex flex-col space-y-4 w-full items-center">
               <ShowMonthly data={data} name={doctorSearch} />
               <h6 className="uppercase text-xs text-bold">Prescriptions Per Month: {doctorSearch}</h6>
             </div>
