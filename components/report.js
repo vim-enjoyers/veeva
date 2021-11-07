@@ -10,6 +10,11 @@ const Report = ({ data }) => {
   const [stateFilter, setStateFilter] = useState("All")
   const [futureMonths, setFutureMonths] = useState(6)
 
+  const clearFilters = () => {
+    setDrugFilter("All")
+    setStateFilter("All")
+  }
+
   const generateFilters = () => {
     return (<>
       <div className="my-4 flex flex-col space-y-4">
@@ -20,6 +25,7 @@ const Report = ({ data }) => {
         <div className="flex flex-col">
           {generateStateFilters()}
         </div>
+        {drugFilter !== stateFilter ? <a className="text-sm underline cursor-pointer" onClick={clearFilters}>Clear Filters</a> : null}
       </div>
     </>)
   }
